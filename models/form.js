@@ -1,0 +1,32 @@
+"use strict"
+const { Model } = require("sequelize")
+module.exports = (sequelize, DataTypes) => {
+	class form extends Model {
+		/**
+		 * Helper method for defining associations.
+		 * This method is not a part of Sequelize lifecycle.
+		 * The `models/index` file will call this method automatically.
+		 */
+		static associate(models) {
+			// define association here
+		}
+	}
+	form.init(
+		{
+			fk_formone_id: DataTypes.INTEGER,
+			fk_formtwo_id: DataTypes.INTEGER,
+			fk_formthree_id: DataTypes.INTEGER,
+			fk_formfour_id: DataTypes.INTEGER,
+			fk_employee_id: DataTypes.INTEGER,
+			fk_committee_id: DataTypes.INTEGER,
+			fk_assessment_id: DataTypes.INTEGER,
+		},
+		{
+			sequelize,
+			modelName: "form",
+			tableName: "form",
+			timestamps: false,
+		}
+	)
+	return form
+}
