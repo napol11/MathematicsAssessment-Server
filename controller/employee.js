@@ -31,10 +31,22 @@ exports.dataEmployee = async (req, res) => {
 
 // list assessment
 exports.employeeAssessment = async (req, res) => {
+	const employee_id = req.body.employee_id
+
 	const assessment = await models.assessment.findAll()
+	const findEmofFormresult = await models.formresult.findAll({
+		where: {
+			fk_employee_id: employee_id,
+		},
+	})
 
 	res.status(200).json({
-		data: assessment,
+		data: [
+			{
+				form: assessment,
+				formresult: findEmofFormresult,
+			},
+		],
 	})
 }
 
@@ -222,6 +234,96 @@ exports.dataFormfour = async (req, res) => {
 							],
 						})
 					})
+			}
+		})
+		.catch(err => {
+			res.status(500).send({
+				message: err.message || "ERROR",
+			})
+		})
+}
+
+// create form two
+exports.formtwo = async (req, res) => {
+	const assessment_id = req.body.assessment_id
+	const employee_id = req.body.employee_id
+
+	await models.formresult
+		.findOne({
+			where: {
+				[Op.and]: [
+					{
+						fk_assessment_id: assessment_id,
+					},
+					{
+						fk_employee_id: employee_id,
+					},
+				],
+			},
+		})
+		.then(formresult => {
+			// const formtworesult = {
+			// 	fk_formresult_id: formresult.id,
+			// }
+			const formtwo = {
+				formtwo_table: req.body.formtwo_table,
+				formtwo_name: req.body.formtwo_name,
+				formtwo_fte: req.body.formtwo_fte,
+				formtwo_sucessem: req.body.formtwo_sucessem,
+				formtwo_comment: req.body.formtwo_comment,
+				formtwo_code: req.body.formtwo_code,
+				fk_formresult_id: formresult.id,
+			}
+
+			models.formtwo.create(formtwo).then(formtwo => {
+				res.status(200).json({
+					data: [
+						{
+							formresult: formresult,
+							formtwo: formtwo,
+						},
+					],
+				})
+			})
+		})
+		.catch(err => {
+			res.status(500).send({
+				message: err.message || "ERROR",
+			})
+		})
+}
+
+// finish Assessment
+exports.finishAssessment = async (req, res) => {
+	const assessment_id = req.body.assessment_id
+	const employee_id = req.body.employee_id
+
+	const status = {
+		status_result: "finish",
+	}
+
+	await models.formresult
+		.update(status, {
+			where: {
+				[Op.and]: [
+					{
+						fk_assessment_id: assessment_id,
+					},
+					{
+						fk_employee_id: employee_id,
+					},
+				],
+			},
+		})
+		.then(num => {
+			if (num == 1) {
+				res.send({
+					message: "Update Sussessfully",
+				})
+			} else {
+				res.send({
+					message: "Cannot Update",
+				})
 			}
 		})
 		.catch(err => {

@@ -19,6 +19,8 @@ module.exports = (sequelize, DataTypes) => {
 			formtwo_sucessem: DataTypes.INTEGER,
 			formtwo_comment: DataTypes.STRING,
 			formtwo_code: DataTypes.INTEGER,
+			// fk_formtworesult_id: DataTypes.INTEGER,
+			fk_formresult_id: DataTypes.INTEGER,
 		},
 		{
 			sequelize,

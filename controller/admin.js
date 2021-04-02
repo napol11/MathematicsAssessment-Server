@@ -273,6 +273,8 @@ exports.assessmentCreate = async (req, res) => {
 		})
 }
 
+// data assessment by id
+
 // update assessment
 exports.assessmentUpdate = async (req, res) => {
 	const id = req.params.id

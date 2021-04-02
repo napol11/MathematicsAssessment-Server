@@ -26,6 +26,12 @@ module.exports = {
 			formtwo_code: {
 				type: Sequelize.INTEGER,
 			},
+			// fk_formtworesult_id: {
+			// 	type: Sequelize.INTEGER,
+			// },
+			fk_formresult_id: {
+				type: Sequelize.INTEGER,
+			},
 			//   createdAt: {
 			//     allowNull: false,
 			//     type: Sequelize.DATE

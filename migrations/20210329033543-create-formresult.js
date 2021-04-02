@@ -20,6 +20,9 @@ module.exports = {
 			fk_assessment_id: {
 				type: Sequelize.INTEGER,
 			},
+			status_result: {
+				typeof: Sequelize.STRING,
+			},
 			//   createdAt: {
 			//     allowNull: false,
 			//     type: Sequelize.DATE

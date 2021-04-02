@@ -2,11 +2,27 @@ const models = require("../models/index")
 const { Op } = require("sequelize")
 
 // list employee
+
+// หาคนที่ส่งฟอร์มการประเมินจนเสร็จก่อนถึงจะประเมินได้
 exports.employeeAll = async (req, res) => {
+	const assessment_id = req.body.assessment_id
+	const committee_id = req.body.committee_id
+
 	const employeeAll = await models.employeeAll.findAll()
 
+	const find = await models.formresult.findAll({
+		where: {
+			fk_assessment_id: assessment_id,
+		},
+	})
+
 	res.status(200).json({
-		data: employeeAll,
+		data: [
+			{
+				employee: employeeAll,
+				formresult: find,
+			},
+		],
 	})
 }
 

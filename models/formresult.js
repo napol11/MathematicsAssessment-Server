@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
 			// fk_formfour_id: DataTypes.INTEGER,
 			fk_employee_id: DataTypes.INTEGER,
 			fk_assessment_id: DataTypes.INTEGER,
+			status_result: DataTypes.STRING,
 		},
 		{
 			sequelize,

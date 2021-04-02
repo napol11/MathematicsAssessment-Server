@@ -7,7 +7,7 @@ const employeeController = require("../controller/employee")
 router.get("/employee/:id", employeeController.dataEmployee)
 
 // list assessment
-router.get("/assessment", employeeController.employeeAssessment)
+router.post("/assessment", employeeController.employeeAssessment)
 
 // form one
 router.post("/formone", employeeController.formone)
@@ -20,4 +20,10 @@ router.post("/dataFormone", employeeController.dataFormone)
 
 // data form four
 router.post("/dataFormfour", employeeController.dataFormfour)
+
+// finishAssessment
+router.post("/finishAssessment", employeeController.finishAssessment)
+
+// form two
+router.post("/formtwo", employeeController.formtwo)
 module.exports = router
