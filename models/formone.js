@@ -27,8 +27,9 @@ module.exports = (sequelize, DataTypes) => {
 			formone_promtwo: DataTypes.STRING,
 			formone_punishdate: DataTypes.STRING,
 			formone_punishievel: DataTypes.STRING,
-			fk_employee_id: DataTypes.INTEGER,
-			fk_assessment_id: DataTypes.INTEGER,
+			// fk_employee_id: DataTypes.INTEGER,
+			// fk_assessment_id: DataTypes.INTEGER,
+			fk_formresult_id: DataTypes.INTEGER,
 		},
 		{
 			sequelize,

@@ -17,8 +17,9 @@ module.exports = (sequelize, DataTypes) => {
 			formfour_emtwo: DataTypes.STRING,
 			formfour_emthree: DataTypes.STRING,
 			formfour_emfour: DataTypes.STRING,
-			fk_employee_id: DataTypes.INTEGER,
-			fk_assessment_id: DataTypes.INTEGER,
+			fk_formresult_id: DataTypes.INTEGER,
+			// fk_employee_id: DataTypes.INTEGER,
+			// fk_assessment_id: DataTypes.INTEGER,
 		},
 		{
 			sequelize,

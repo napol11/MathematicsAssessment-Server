@@ -8,9 +8,9 @@ module.exports = {
 				primaryKey: true,
 				type: Sequelize.INTEGER,
 			},
-			fk_formthree_id: {
-				type: Sequelize.INTEGER,
-			},
+			// fk_formthree_id: {
+			// 	type: Sequelize.INTEGER,
+			// },
 			fk_formresult_id: {
 				type: Sequelize.INTEGER,
 			},

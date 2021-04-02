@@ -40,50 +40,40 @@ exports.employeeAssessment = async (req, res) => {
 
 //create form one
 exports.formone = async (req, res) => {
-	const formone = {
-		formone_lasick: req.body.lasick,
-		formone_lapaper: req.body.lapaper,
-		formone_laprivate: req.body.laprivate,
-		formone_lalate: req.body.lalate,
-		formone_laleave: req.body.laleave,
-		formone_lababy: req.body.lababy,
-		formone_lamonk: req.body.lamonk,
-		formone_lamilitary: req.body.lamilitary,
-		formone_budgetone: req.body.budgetone,
-		formone_budgettwo: req.body.budgettwo,
-		formone_promone: req.body.promone,
-		formone_promtwo: req.body.promtwo,
-		formone_punishdate: req.body.punishdate,
-		formone_punishievel: req.body.punishievel,
+	const formresult = {
 		fk_employee_id: req.body.employee_id,
 		fk_assessment_id: req.body.assessment_id,
 	}
 
-	await models.formone
-		.create(formone)
-		.then(formone => {
-			// const form = {
-			// 	fk_employee_id: req.body.employee_id,
-			// 	fk_assessment_id: req.body.assessment_id,
-			// 	fk_formone_id: formone.id,
-			// }
-			// models.form.create(form).then(form => {
-			// 	res.status(200).json({
-			// 		data: [
-			// 			{
-			// 				form: form,
-			// 				formone: formone,
-			// 			},
-			// 		],
-			// 	})
-			//})
-			res.status(200).json({
-				data: [
-					{
-						// form: form,
-						formone: formone,
-					},
-				],
+	await models.formresult
+		.create(formresult)
+		.then(formresult => {
+			const formone = {
+				formone_lasick: req.body.lasick,
+				formone_lapaper: req.body.lapaper,
+				formone_laprivate: req.body.laprivate,
+				formone_lalate: req.body.lalate,
+				formone_laleave: req.body.laleave,
+				formone_lababy: req.body.lababy,
+				formone_lamonk: req.body.lamonk,
+				formone_lamilitary: req.body.lamilitary,
+				formone_budgetone: req.body.budgetone,
+				formone_budgettwo: req.body.budgettwo,
+				formone_promone: req.body.promone,
+				formone_promtwo: req.body.promtwo,
+				formone_punishdate: req.body.punishdate,
+				formone_punishievel: req.body.punishievel,
+				fk_formresult_id: formresult.id,
+			}
+			models.formone.create(formone).then(formone => {
+				res.status(200).json({
+					data: [
+						{
+							form: formresult,
+							formone: formone,
+						},
+					],
+				})
 			})
 		})
 		.catch(err => {
@@ -93,32 +83,41 @@ exports.formone = async (req, res) => {
 		})
 }
 
-// create form two
-// exports.formtwo = async (req, res) => {
-//     const formtwo = {
-
-//     }
-// }
-
 // create form four
 exports.formfour = async (req, res) => {
-	const formfour = {
-		formfour_emone: req.body.empne,
-		formfour_emtwo: req.body.emtwo,
-		formfour_emthree: req.body.emthree,
-		formfour_emfour: req.body.emfour,
-		fk_employee_id: req.body.employee_id,
-		fk_assessment_id: req.body.assessment_id,
-	}
-	await models.formfour
-		.create(formfour)
-		.then(formfour => {
-			res.status(200).json({
-				data: [
+	const fk_employee_id = req.body.employee_id
+	const fk_assessment_id = req.body.assessment_id
+
+	await models.formresult
+		.findOne({
+			where: {
+				[Op.and]: [
 					{
-						formfour: formfour,
+						fk_assessment_id: fk_employee_id,
+					},
+					{
+						fk_employee_id: fk_assessment_id,
 					},
 				],
+			},
+		})
+		.then(formresult => {
+			const formfour = {
+				formfour_emone: req.body.empne,
+				formfour_emtwo: req.body.emtwo,
+				formfour_emthree: req.body.emthree,
+				formfour_emfour: req.body.emfour,
+				fk_formresult_id: formresult.id,
+			}
+			models.formfour.create(formfour).then(formfour => {
+				res.status(200).json({
+					data: [
+						{
+							form: formresult,
+							formfour: formfour,
+						},
+					],
+				})
 			})
 		})
 		.catch(err => {
@@ -133,7 +132,7 @@ exports.dataFormone = async (req, res) => {
 	const assessment_id = req.body.assessment_id
 	const employee_id = req.body.employee_id
 
-	await models.formone
+	await models.formresult
 		.findOne({
 			where: {
 				[Op.and]: [
@@ -146,36 +145,35 @@ exports.dataFormone = async (req, res) => {
 				],
 			},
 		})
-		.then(formone => {
-			if (!formone) {
+		.then(form => {
+			if (!form) {
 				res.status(404).send({
 					message: "not found",
 				})
+			} else {
+				models.formone
+					.findOne({
+						where: {
+							fk_formresult_id: form.id,
+						},
+					})
+					.then(formone => {
+						if (!form) {
+							res.status(404).send({
+								message: "not found",
+							})
+						} else {
+							res.status(200).json({
+								data: [
+									{
+										form: form,
+										formone: formone,
+									},
+								],
+							})
+						}
+					})
 			}
-			// else {
-			// 	models.formone
-			// 		.findOne({
-			// 			where: { [Op.eq]: form.fk_formone_id },
-			// 		})
-			// 		.then(formone => {
-			// 			res.status(200).json({
-			// 				data: [
-			// 					{
-			// 						form: form,
-			// 						formone: formone,
-			// 					},
-			// 				],
-			// 			})
-			// 		})
-			// }
-
-			res.status(200).json({
-				data: [
-					{
-						formone: formone,
-					},
-				],
-			})
 		})
 		.catch(err => {
 			res.status(500).send({
@@ -189,7 +187,7 @@ exports.dataFormfour = async (req, res) => {
 	const assessment_id = req.body.assessment_id
 	const employee_id = req.body.employee_id
 
-	await models.formfour
+	await models.formresult
 		.findOne({
 			where: {
 				[Op.and]: [
@@ -202,19 +200,29 @@ exports.dataFormfour = async (req, res) => {
 				],
 			},
 		})
-		.then(formfour => {
-			if (!formfour) {
+		.then(form => {
+			if (!form) {
 				res.status(404).send({
 					message: "not found",
 				})
+			} else {
+				models.formfour
+					.findOne({
+						where: {
+							fk_formresult_id: form.id,
+						},
+					})
+					.then(formfour => {
+						res.status(200).json({
+							data: [
+								{
+									form: form,
+									formfour: formfour,
+								},
+							],
+						})
+					})
 			}
-			res.status(200).json({
-				data: [
-					{
-						formfour: formfour,
-					},
-				],
-			})
 		})
 		.catch(err => {
 			res.status(500).send({

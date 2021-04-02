@@ -17,6 +17,9 @@ module.exports = {
 			formthree_comment: {
 				type: Sequelize.STRING,
 			},
+			fk_formthreeresult_id: {
+				type: Sequelize.INTEGER,
+			},
 			//   createdAt: {
 			//     allowNull: false,
 			//     type: Sequelize.DATE

@@ -50,10 +50,13 @@ module.exports = {
 			formone_punishievel: {
 				type: Sequelize.STRING,
 			},
-			fk_assessment_id: {
-				type: Sequelize.INTEGER,
-			},
-			fk_employee_id: {
+			// fk_assessment_id: {
+			// 	type: Sequelize.INTEGER,
+			// },
+			// fk_employee_id: {
+			// 	type: Sequelize.INTEGER,
+			// },
+			fk_formresult_id: {
 				type: Sequelize.INTEGER,
 			},
 			// createdAt: {

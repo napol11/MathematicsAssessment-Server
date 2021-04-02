@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
 			formthree_num: DataTypes.INTEGER,
 			formthree_score: DataTypes.INTEGER,
 			formthree_comment: DataTypes.STRING,
+			fk_formthreeresult_id: DataTypes.STRING,
 		},
 		{
 			sequelize,

@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
 	}
 	formthree_result.init(
 		{
-			fk_formthree_id: DataTypes.INTEGER,
+			// fk_formthree_id: DataTypes.INTEGER,
 			fk_formresult_id: DataTypes.INTEGER,
 			fk_committee_id: DataTypes.INTEGER,
 		},

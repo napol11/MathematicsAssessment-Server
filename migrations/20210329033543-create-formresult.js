@@ -8,12 +8,12 @@ module.exports = {
 				primaryKey: true,
 				type: Sequelize.INTEGER,
 			},
-			fk_formone_id: {
-				type: Sequelize.INTEGER,
-			},
-			fk_formfour_id: {
-				type: Sequelize.INTEGER,
-			},
+			// fk_formone_id: {
+			// 	type: Sequelize.INTEGER,
+			// },
+			// fk_formfour_id: {
+			// 	type: Sequelize.INTEGER,
+			// },
 			fk_employee_id: {
 				type: Sequelize.INTEGER,
 			},

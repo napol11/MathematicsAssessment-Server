@@ -10,12 +10,12 @@ exports.employeeAll = async (req, res) => {
 	})
 }
 
-// data form one
+// data Formone
 exports.dataFormone = async (req, res) => {
 	const assessment_id = req.body.assessment_id
 	const employee_id = req.body.employee_id
 
-	await models.formone
+	await models.formresult
 		.findOne({
 			where: {
 				[Op.and]: [
@@ -28,20 +28,35 @@ exports.dataFormone = async (req, res) => {
 				],
 			},
 		})
-		.then(formone => {
-			if (!formone) {
+		.then(form => {
+			if (!form) {
 				res.status(404).send({
 					message: "not found",
 				})
+			} else {
+				models.formone
+					.findOne({
+						where: {
+							fk_formresult_id: form.id,
+						},
+					})
+					.then(formone => {
+						if (!form) {
+							res.status(404).send({
+								message: "not found",
+							})
+						} else {
+							res.status(200).json({
+								data: [
+									{
+										form: form,
+										formone: formone,
+									},
+								],
+							})
+						}
+					})
 			}
-
-			res.status(200).json({
-				data: [
-					{
-						formone: formone,
-					},
-				],
-			})
 		})
 		.catch(err => {
 			res.status(500).send({
@@ -49,25 +64,51 @@ exports.dataFormone = async (req, res) => {
 			})
 		})
 }
-
 // create form four
+// เวลาว่งข้อมูลมีค่า employee_id,assessment_id,comone,comtwo,committee_id
 exports.formfour = async (req, res) => {
-	const formfour = {
-		formfour_comone: req.body.comone,
-		formfour_comtwo: req.body.comtwo,
-		fk_committee_id: req.body.committee_id,
-		fk_formfour_id: req.body.formfour_id,
-	}
-	await models.formfour_committee
-		.create(formfour)
-		.then(formfour => {
-			res.status(200).json({
-				data: [
+	const fk_employee_id = req.body.employee_id
+	const fk_assessment_id = req.body.assessment_id
+
+	await models.formresult
+		.findOne({
+			where: {
+				[Op.and]: [
 					{
-						formfour: formfour,
+						fk_assessment_id: fk_employee_id,
+					},
+					{
+						fk_employee_id: fk_assessment_id,
 					},
 				],
-			})
+			},
+		})
+		.then(formresult => {
+			models.formfour
+				.findOne({
+					where: {
+						fk_formresult_id: formresult.id,
+					},
+				})
+				.then(formfour => {
+					const formfourcommittee = {
+						formfour_comone: req.body.comone,
+						formfour_comtwo: req.body.comtwo,
+						fk_committee_id: req.body.committee_id,
+						fk_formfour_id: formfour.id,
+					}
+					models.formfour_committee.create(formfourcommittee).then(formfour_committee => {
+						res.status(200).json({
+							data: [
+								{
+									formresult: formresult,
+									formfour: formfour,
+									formfour_committee: formfour_committee,
+								},
+							],
+						})
+					})
+				})
 		})
 		.catch(err => {
 			res.status(500).send({
@@ -81,7 +122,7 @@ exports.dataFormfour = async (req, res) => {
 	const assessment_id = req.body.assessment_id
 	const employee_id = req.body.employee_id
 
-	await models.formfour
+	await models.formresult
 		.findOne({
 			where: {
 				[Op.and]: [
@@ -94,27 +135,88 @@ exports.dataFormfour = async (req, res) => {
 				],
 			},
 		})
-		.then(formfour => {
-			if (!formfour) {
+		.then(formresult => {
+			if (!formresult) {
 				res.status(404).send({
 					message: "not found",
 				})
 			} else {
-				models.formfour_committee
+				models.formfour
 					.findOne({
-						where: { fk_formfour_id: formfour.id },
+						where: {
+							fk_formresult_id: formresult.id,
+						},
 					})
-					.then(committee => {
-						res.status(200).json({
-							data: [
-								{
-									employee: formfour,
-									committee: committee,
+					.then(formfour => {
+						models.formfour_committee
+							.findAll({
+								where: {
+									fk_formfour_id: formfour.id,
 								},
-							],
-						})
+							})
+							.then(formfour_committee => {
+								res.status(200).json({
+									data: [
+										{
+											formresult: formresult,
+											formfour: formfour,
+											formfour_committee: formfour_committee,
+										},
+									],
+								})
+							})
 					})
 			}
+		})
+		.catch(err => {
+			res.status(500).send({
+				message: err.message || "ERROR",
+			})
+		})
+}
+
+//create form three
+exports.formthree = async (req, res) => {
+	const assessment_id = req.body.assessment_id
+	const employee_id = req.body.employee_id
+
+	await models.formresult
+		.findOne({
+			where: {
+				[Op.and]: [
+					{
+						fk_assessment_id: assessment_id,
+					},
+					{
+						fk_employee_id: employee_id,
+					},
+				],
+			},
+		})
+		.then(formresult => {
+			const formthreeresult = {
+				fk_formresult_id: formresult.id,
+				fk_committee_id: req.body.committee_id,
+			}
+			models.formthree_result.create(formthreeresult).then(formthreeresult => {
+				const formthree = {
+					formthree_num: req.body.formthree_num,
+					formthree_score: req.body.formthree_score,
+					formthree_comment: req.body.formthree_comment,
+					fk_formthreeresult_id: formthreeresult.id,
+				}
+				models.formthree.create(formthree).then(formthree => {
+					res.status(200).json({
+						data: [
+							{
+								formresult: formresult,
+								formthreeresult: formthreeresult,
+								formthree: formthree,
+							},
+						],
+					})
+				})
+			})
 		})
 		.catch(err => {
 			res.status(500).send({

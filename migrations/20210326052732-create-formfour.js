@@ -20,10 +20,13 @@ module.exports = {
 			formfour_emfour: {
 				type: Sequelize.STRING,
 			},
-			fk_employee_id: {
-				type: Sequelize.INTEGER,
-			},
-			fk_assessment_id: {
+			// fk_employee_id: {
+			// 	type: Sequelize.INTEGER,
+			// },
+			// fk_assessment_id: {
+			// 	type: Sequelize.INTEGER,
+			// },
+			fk_formresult_id: {
 				type: Sequelize.INTEGER,
 			},
 			//   createdAt: {
