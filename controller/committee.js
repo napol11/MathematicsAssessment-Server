@@ -64,6 +64,7 @@ exports.dataFormone = async (req, res) => {
 			})
 		})
 }
+
 // create form four
 // เวลาว่งข้อมูลมีค่า employee_id,assessment_id,comone,comtwo,committee_id
 exports.formfour = async (req, res) => {
@@ -222,5 +223,52 @@ exports.formthree = async (req, res) => {
 			res.status(500).send({
 				message: err.message || "ERROR",
 			})
+		})
+}
+
+//list form three
+exports.dataFromthree = async (req, res) => {
+	const assessment_id = req.body.assessment_id
+	const employee_id = req.body.employee_id
+
+	await models.formresult
+		.findOne({
+			where: {
+				[Op.and]: [
+					{
+						fk_assessment_id: assessment_id,
+					},
+					{
+						fk_employee_id: employee_id,
+					},
+				],
+			},
+		})
+		.then(formresult => {
+			models.formthree_result
+				.findOne({
+					where: {
+						fk_formresult_id: formresult.id,
+					},
+				})
+				.then(formthree_result => {
+					models.formthree
+						.findAll({
+							where: {
+								fk_formthreeresult_id: formthree_result.id,
+							},
+						})
+						.then(formthree => {
+							res.status(200).json({
+								data: [
+									{
+										formresult: formresult,
+										formthree_result: formthree_result,
+										formthree: formthree,
+									},
+								],
+							})
+						})
+				})
 		})
 }
