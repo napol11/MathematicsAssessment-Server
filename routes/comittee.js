@@ -3,8 +3,11 @@ const router = express.Router()
 
 const committeeController = require("../controller/committee")
 
+//list assessment
+router.get("/assessment", committeeController.listassessmentAll)
+
 //list employee
-router.get("/assessment", committeeController.employeeAll)
+router.post("/employee", committeeController.employeeAll)
 
 // data form one
 router.post("/dataFormone", committeeController.dataFormone)

@@ -26,4 +26,8 @@ router.post("/finishAssessment", employeeController.finishAssessment)
 
 // form two
 router.post("/formtwo", employeeController.formtwo)
+
+// data form two
+router.post("/dataFormtwo", employeeController.dataFormtwo)
+
 module.exports = router
