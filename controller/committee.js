@@ -38,6 +38,7 @@ exports.employeeAll = async (req, res) => {
 					data: [
 						{
 							employee: employeeAll,
+							employee: employeeAll4,
 						},
 					],
 				})
@@ -294,57 +295,65 @@ exports.formthree = async (req, res) => {
 					})
 					.then(findformthreeresult => {
 						if (!findformthreeresult) {
-							res.send({
-								message: "11111",
-							})
-							// const formthreeresult = {
-							// 	fk_formresult_id: findresult.id,
-							// 	fk_committee_id: committee_id,
-							// }
-							// models.formthree_result.create(formthreeresult).then(formthreeresult => {
-							const formthree = {
-								formthree_num: req.body.formthree_num,
-								formthree_score: req.body.formthree_score,
-								formthree_comment: req.body.formthree_comment,
-								// fk_formthreeresult_id: formthreeresult.id,
+							const formthreeresult = {
+								fk_formresult_id: findresult.id,
+								fk_committee_id: committee_id,
 							}
-							models.formthree.create(formthree).then(formthree => {
-								res.status(200).json({
-									data: [
-										{
-											formthreeresult: formthreeresult,
-											formthree: formthree,
-										},
-									],
-								})
+							var i
+							models.formthree_result.create(formthreeresult).then(formthreeresult => {
+								for (i = 0; i < req.body.test.length; i++) {
+									const formthree = {
+										formthree_num: req.body.test[i].formthree_num,
+										formthree_score: req.body.test[i].formthree_score,
+										formthree_comment: req.body.test[i].formthree_comment,
+										fk_formthreeresult_id: formthreeresult.id,
+									}
+									models.formthree.create(formthree).then(formthree => {
+										res.status(200).json({
+											data: [
+												{
+													formthreeresult: formthreeresult,
+													formthree: formthree,
+												},
+											],
+										})
+									})
+								}
 							})
-							// })
 						} else {
-							res.send({
-								message: "132",
+							// res.json({
+							// 	data: findformthreeresult.id,
+							// })
+							models.formthree.destroy({
+								where: {
+									fk_formthreeresult_id: findformthreeresult.id,
+								},
 							})
-							// const formthree = {
-							// 	formthree_num: req.body.formthree_num,
-							// 	formthree_score: req.body.formthree_score,
-							// 	formthree_comment: req.body.formthree_comment,
-							// }
-							// models.formthree
-							// 	.update(formthree, {
-							// 		where: {
-							// 			fk_formthreeresult_id: findformthreeresult.id,
-							// 		},
-							// 	})
-							// 	.then(num => {
-							// 		if (num == 1) {
-							// 			res.send({
-							// 				message: "Update Sussessfully",
-							// 			})
-							// 		} else {
-							// 			res.send({
-							// 				message: "Cannot Update",
-							// 			})
-							// 		}
-							// 	})
+							const formthreeresult = {
+								fk_formresult_id: findresult.id,
+								fk_committee_id: committee_id,
+							}
+							var i
+							models.formthree_result.create(formthreeresult).then(formthreeresult => {
+								for (i = 0; i < req.body.test.length; i++) {
+									const formthree = {
+										formthree_num: req.body.test[i].formthree_num,
+										formthree_score: req.body.test[i].formthree_score,
+										formthree_comment: req.body.test[i].formthree_comment,
+										fk_formthreeresult_id: formthreeresult.id,
+									}
+									models.formthree.create(formthree).then(formthree => {
+										res.status(200).json({
+											data: [
+												{
+													formthreeresult: formthreeresult,
+													formthree: formthree,
+												},
+											],
+										})
+									})
+								}
+							})
 						}
 					})
 			} else {
@@ -387,7 +396,7 @@ exports.dataFromthree = async (req, res) => {
 						},
 					})
 					.then(formthree_result => {
-						if (formthree_result) {
+						if (formthree_result.length > 0) {
 							models.formthree.findAll().then(formthree => {
 								const formthreeCom = formthree_result.map(formthree_result => formthree.filter(formthree => formthree.fk_formthreeresult_id == formthree_result.id))
 
@@ -559,7 +568,7 @@ exports.dataFormtwo = async (req, res) => {
 				})
 			} else {
 				models.formtwo
-					.findOne({
+					.findAll({
 						where: {
 							fk_formresult_id: form.id,
 						},
