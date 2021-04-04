@@ -24,4 +24,10 @@ router.post("/formthree", committeeController.formthree)
 // data form three
 router.post("/dataFromthree", committeeController.dataFromthree)
 
+// form two
+router.post("/formtwo", committeeController.formtwo)
+
+// data form two
+router.post("/dataFormtwo", committeeController.dataFormtwo)
+
 module.exports = router
