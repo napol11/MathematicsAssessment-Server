@@ -370,7 +370,6 @@ exports.dataFormfour = async (req, res) => {
 		})
 }
 
-// ยังใช้ไม่ได้
 // create and update form two
 exports.formtwo = async (req, res) => {
 	const assessment_id = req.body.assessment_id
@@ -399,49 +398,55 @@ exports.formtwo = async (req, res) => {
 					})
 					.then(findformtwo => {
 						if (!findformtwo) {
-							const formtwo = {
-								formtwo_table: req.body.formtwo_table,
-								formtwo_name: req.body.formtwo_name,
-								formtwo_fte: req.body.formtwo_fte,
-								formtwo_sucessem: req.body.formtwo_sucessem,
-								formtwo_comment: req.body.formtwo_comment,
-								formtwo_code: req.body.formtwo_code,
-								fk_formresult_id: findresult.id,
-							}
+							var i
+							for (i = 0; i < req.body.formtwo.length; i++) {
+								const formtwo = {
+									formtwo_table: req.body.formtwo[i].formtwo_table,
+									formtwo_name: req.body.formtwo[i].formtwo_name,
+									formtwo_fte: req.body.formtwo[i].formtwo_fte,
+									formtwo_sucessem: req.body.formtwo[i].formtwo_sucessem,
+									formtwo_comment: req.body.formtwo[i].formtwo_comment,
+									formtwo_code: req.body.formtwo[i].formtwo_code,
+									fk_formresult_id: findresult.id,
+								}
 
-							models.formtwo.create(formtwo).then(formtwo => {
-								res.status(200).json({
-									data: [
-										{
-											formtwo: formtwo,
-										},
-									],
+								models.formtwo.create(formtwo).then(formtwo => {
+									res.status(200).json({
+										data: [
+											{
+												formtwo: formtwo,
+											},
+										],
+									})
 								})
-							})
-						} else {
-							const formtwo = {
-								formtwo_table: req.body.formtwo_table,
-								formtwo_name: req.body.formtwo_name,
-								formtwo_fte: req.body.formtwo_fte,
-								formtwo_sucessem: req.body.formtwo_sucessem,
-								formtwo_comment: req.body.formtwo_comment,
-								formtwo_code: req.body.formtwo_code,
 							}
-							models.formtwo
-								.update(formtwo, {
-									where: { id: findresult.id },
+						} else {
+							models.formtwo.destroy({
+								where: {
+									fk_formthreeresult_id: findformtwo.id,
+								},
+							})
+							var i
+							for (i = 0; i < req.body.formtwo.length; i++) {
+								const formtwo = {
+									formtwo_table: req.body.formtwo[i].formtwo_table,
+									formtwo_name: req.body.formtwo[i].formtwo_name,
+									formtwo_fte: req.body.formtwo[i].formtwo_fte,
+									formtwo_sucessem: req.body.formtwo[i].formtwo_sucessem,
+									formtwo_comment: req.body.formtwo[i].formtwo_comment,
+									formtwo_code: req.body.formtwo[i].formtwo_code,
+									fk_formresult_id: findresult.id,
+								}
+								models.formtwo.create(formtwo).then(formtwo => {
+									res.status(200).json({
+										data: [
+											{
+												formtwo: formtwo,
+											},
+										],
+									})
 								})
-								.then(num => {
-									if (num == 1) {
-										res.send({
-											message: "Update Sussessfully",
-										})
-									} else {
-										res.send({
-											message: "Cannot Update",
-										})
-									}
-								})
+							}
 						}
 					})
 			} else {
@@ -482,7 +487,7 @@ exports.dataFormtwo = async (req, res) => {
 				})
 			} else {
 				models.formtwo
-					.findOne({
+					.findAll({
 						where: {
 							fk_formresult_id: form.id,
 						},

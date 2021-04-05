@@ -321,9 +321,6 @@ exports.formthree = async (req, res) => {
 								}
 							})
 						} else {
-							// res.json({
-							// 	data: findformthreeresult.id,
-							// })
 							models.formthree.destroy({
 								where: {
 									fk_formthreeresult_id: findformthreeresult.id,
@@ -335,11 +332,11 @@ exports.formthree = async (req, res) => {
 							}
 							var i
 							models.formthree_result.create(formthreeresult).then(formthreeresult => {
-								for (i = 0; i < req.body.test.length; i++) {
+								for (i = 0; i < req.body.formthree.length; i++) {
 									const formthree = {
-										formthree_num: req.body.test[i].formthree_num,
-										formthree_score: req.body.test[i].formthree_score,
-										formthree_comment: req.body.test[i].formthree_comment,
+										formthree_num: req.body.formthree[i].formthree_num,
+										formthree_score: req.body.formthree[i].formthree_score,
+										formthree_comment: req.body.formthree[i].formthree_comment,
 										fk_formthreeresult_id: formthreeresult.id,
 									}
 									models.formthree.create(formthree).then(formthree => {
@@ -427,7 +424,6 @@ exports.dataFromthree = async (req, res) => {
 		})
 }
 
-// ยังใช้ไม่ได้
 //create and update form two
 exports.formtwo = async (req, res) => {
 	const assessment_id = req.body.assessment_id
@@ -449,83 +445,63 @@ exports.formtwo = async (req, res) => {
 		.then(findresult => {
 			if (findresult) {
 				models.formtwo
-					.findOne({
+					.findAll({
 						where: {
 							fk_formresult_id: findresult.id,
 						},
 					})
 					.then(findformtwo => {
-						if (findformtwo) {
+						if (findformtwo.length > 0) {
 							models.formtwo_committee
-								.findOne({
+								.findAll({
 									where: {
 										fk_formtwo_id: findformtwo.id,
 									},
 								})
 								.then(findformtwoCom => {
-									if (!findformtwoCom) {
-										const formtwo_committee = {
-											fk_formtwo_id: findformtwo.id,
-											fk_committee_id: req.body.committee_id,
-											formtwo_sucesscom: req.body.formtwo_sucesscom,
+									if (findformtwoCom.length == 0) {
+										var i
+										for (i = 0; i < req.body.formtwo.length; i++) {
+											const formtwo_committee = {
+												fk_formtwo_id: findformtwo.id,
+												fk_committee_id: req.body.formtwo[i].committee_id,
+												formtwo_sucesscom: req.body.formtwo[i].formtwo_sucesscom,
+											}
+											models.formtwo_committee.create(formtwo_committee).then(formtwoCom => {
+												res.status(200).json({
+													data: [
+														{
+															formtwo: findformtwo,
+															formtwo_committee: formtwoCom,
+														},
+													],
+												})
+											})
 										}
-										models.formtwo_committee.create(formtwo_committee).then(formtwoCom => {
-											res.status(200).json({
-												data: [
-													{
-														formtwo: findformtwo,
-														formtwo_committee: formtwoCom,
-													},
-												],
-											})
-										})
 									} else {
-										models.formtwo_committee
-											.findOne({
-												where: {
-													fk_committee_id: req.body.committee_id,
-												},
+										models.formtwo_committee.destroy({
+											where: {
+												fk_committee_id: req.body.committee_id,
+											},
+										})
+										var i
+										for (i = 0; i < req.body.formtwo.length; i++) {
+											const formtwo_committee = {
+												fk_formtwo_id: findformtwo.id,
+												fk_committee_id: req.body.formtwo[i].committee_id,
+												formtwo_sucesscom: req.body.formtwo[i].formtwo_sucesscom,
+											}
+											models.formtwo_committee.create(formtwo_committee).then(formtwoCom => {
+												res.status(200).json({
+													data: [
+														{
+															formtwo: findformtwo,
+															formtwo_committee: formtwoCom,
+														},
+													],
+												})
 											})
-											.then(findCom => {
-												if (!findCom) {
-													const formtwo_committee = {
-														fk_formtwo_id: findformtwo.id,
-														fk_committee_id: req.body.committee_id,
-														formtwo_sucesscom: req.body.formtwo_sucesscom,
-													}
-													models.formtwo_committee.create(formtwo_committee).then(formtwoCom => {
-														res.status(200).json({
-															data: [
-																{
-																	formtwo: findformtwo,
-																	formtwo_committee: formtwoCom,
-																},
-															],
-														})
-													})
-												} else {
-													const formtwo_committee = {
-														formtwo_sucesscom: req.body.formtwo_sucesscom,
-													}
-													models.formtwo_committee
-														.update(formtwo_committee, {
-															where: {
-																fk_committee_id: req.body.committee_id,
-															},
-														})
-														.then(num => {
-															if (num == 1) {
-																res.send({
-																	message: "Update Sussessfully",
-																})
-															} else {
-																res.send({
-																	message: "Cannot Update",
-																})
-															}
-														})
-												}
-											})
+										}
 									}
 								})
 						}
