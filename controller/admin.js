@@ -33,6 +33,7 @@ exports.committeeCreate = async (req, res) => {
 				committee_position: req.body.position,
 				committee_tel: req.body.tel,
 				committee_status: req.body.status,
+				email: req.body.email,
 				fk_user_id: user.id,
 			}
 
@@ -99,19 +100,20 @@ exports.committeeDelete = async (req, res) => {
 	const id = req.params.id
 
 	await models.committee
-		.destroy({
+		.findOne({
 			where: { id: id },
 		})
-		.then(num => {
-			if (num == 1) {
-				res.send({
-					message: "Delete Sussessfully",
+		.then(committee => {
+			models.user
+				.findOne({
+					where: { id: committee.fk_user_id },
 				})
-			} else {
-				res.send({
-					message: "Cannot Delete",
+				.then(user => {
+					const committeeFind = committee
+					models.committee.destroy({ where: { id: id } }).then(data => {
+						models.user.destroy({ where: { id: committeeFind.fk_user_id } })
+					})
 				})
-			}
 		})
 		.catch(err => {
 			res.status(500).send({
@@ -154,6 +156,7 @@ exports.employeeCreate = async (req, res) => {
 				employee_number: req.body.number,
 				employee_group: req.body.group,
 				employee_start: req.body.start,
+				email: req.body.email,
 				fk_user_id: user.id,
 			}
 			models.employee
@@ -223,25 +226,57 @@ exports.employeeDelete = async (req, res) => {
 	const id = req.params.id
 
 	await models.employee
-		.destroy({
+		.findOne({
 			where: { id: id },
 		})
-		.then(num => {
-			if (num == 1) {
-				res.send({
-					message: "Delete Sussessfully",
+		.then(employee => {
+			models.user
+				.findOne({
+					where: { id: employee.fk_user_id },
 				})
-			} else {
-				res.send({
-					message: "Cannot Delete",
+				.then(user => {
+					const employeeFind = employee
+					models.employee.destroy({ where: { id: id } }).then(delectEm => {
+						models.user.destroy({ where: { id: employeeFind.fk_user_id } }).then(delectuser => {
+							res.status(200).json({
+								data: [
+									{
+										delectEm: delectEm == 1 ? "Sussessfully" : "Cannot Delete",
+										delectuser: delectuser == 1 ? "Sussessfully" : "Cannot Delete",
+									},
+								],
+							})
+						})
+					})
 				})
-			}
 		})
 		.catch(err => {
 			res.status(500).send({
 				message: err.message || "ERROR",
 			})
 		})
+	// const id = req.params.id
+
+	// await models.employee
+	// 	.destroy({
+	// 		where: { id: id },
+	// 	})
+	// 	.then(num => {
+	// 		if (num == 1) {
+	// 			res.send({
+	// 				message: "Delete Sussessfully",
+	// 			})
+	// 		} else {
+	// 			res.send({
+	// 				message: "Cannot Delete",
+	// 			})
+	// 		}
+	// 	})
+	// 	.catch(err => {
+	// 		res.status(500).send({
+	// 			message: err.message || "ERROR",
+	// 		})
+	// 	})
 }
 
 // list assessment

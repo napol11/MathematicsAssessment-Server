@@ -26,6 +26,9 @@ module.exports = {
 			fk_user_id: {
 				type: Sequelize.INTEGER,
 			},
+			email: {
+				type: Sequelize.STRING,
+			},
 			//   createdAt: {
 			//     allowNull: false,
 			//     type: Sequelize.DATE

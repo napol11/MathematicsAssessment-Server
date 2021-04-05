@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
 			committee_position: DataTypes.STRING,
 			committee_tel: DataTypes.STRING,
 			committee_status: DataTypes.INTEGER,
+			email: DataTypes.STRING,
 			fk_user_id: DataTypes.INTEGER,
 		},
 		{

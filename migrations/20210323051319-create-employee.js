@@ -32,6 +32,9 @@ module.exports = {
 			employee_start: {
 				type: Sequelize.DATE,
 			},
+			email: {
+				type: Sequelize.STRING,
+			},
 			fk_user_id: {
 				type: Sequelize.INTEGER,
 			},
