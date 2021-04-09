@@ -9,6 +9,9 @@ router.get("/employee/:id", employeeController.dataEmployee)
 // list assessment
 router.post("/assessment", employeeController.employeeAssessment)
 
+// list assessment
+router.post("/test", employeeController.test)
+
 // form one
 router.post("/formone", employeeController.formone)
 

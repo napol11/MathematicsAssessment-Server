@@ -41,12 +41,37 @@ exports.employeeAssessment = async (req, res) => {
 	})
 
 	res.status(200).json({
-		data: [
-			{
-				form: assessment,
-				formresult: findEmofFormresult,
-			},
-		],
+		data: {
+			form: assessment,
+			formresult: findEmofFormresult,
+		},
+	})
+}
+
+//test
+exports.test = async (req, res) => {
+	await models.assessment.findAll().then(assessment => {
+		models.formresult
+			.findOne({
+				where: {
+					[Op.and]: [
+						{
+							fk_assessment_id: assessment.id,
+						},
+						{
+							fk_employee_id: employee_id,
+						},
+					],
+				},
+			})
+			.then(data => {
+				res.json({
+					data: {
+						assessment: assessment,
+						result: data,
+					},
+				})
+			})
 	})
 }
 
@@ -222,12 +247,10 @@ exports.dataFormone = async (req, res) => {
 							})
 						} else {
 							res.status(200).json({
-								data: [
-									{
-										form: form,
-										formone: formone,
-									},
-								],
+								data: {
+									form: form,
+									formone: formone,
+								},
 							})
 						}
 					})
