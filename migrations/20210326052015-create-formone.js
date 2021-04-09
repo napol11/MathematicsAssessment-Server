@@ -32,30 +32,12 @@ module.exports = {
 			formone_lamilitary: {
 				type: Sequelize.INTEGER,
 			},
-			formone_budgetone: {
+			formone_historypromo: {
 				type: Sequelize.STRING,
 			},
-			formone_budgettwo: {
+			formone_historypunish: {
 				type: Sequelize.STRING,
 			},
-			formone_promone: {
-				type: Sequelize.STRING,
-			},
-			formone_promtwo: {
-				type: Sequelize.STRING,
-			},
-			formone_punishdate: {
-				type: Sequelize.STRING,
-			},
-			formone_punishievel: {
-				type: Sequelize.STRING,
-			},
-			// fk_assessment_id: {
-			// 	type: Sequelize.INTEGER,
-			// },
-			// fk_employee_id: {
-			// 	type: Sequelize.INTEGER,
-			// },
 			fk_formresult_id: {
 				type: Sequelize.INTEGER,
 			},

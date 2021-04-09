@@ -142,20 +142,16 @@ exports.formone = async (req, res) => {
 			if (!finderesult) {
 				models.formresult.create(formresult).then(formresult => {
 					const formone = {
-						formone_lasick: req.body.lasick,
-						formone_lapaper: req.body.lapaper,
-						formone_laprivate: req.body.laprivate,
-						formone_lalate: req.body.lalate,
-						formone_laleave: req.body.laleave,
-						formone_lababy: req.body.lababy,
-						formone_lamonk: req.body.lamonk,
-						formone_lamilitary: req.body.lamilitary,
-						formone_budgetone: req.body.budgetone,
-						formone_budgettwo: req.body.budgettwo,
-						formone_promone: req.body.promone,
-						formone_promtwo: req.body.promtwo,
-						formone_punishdate: req.body.punishdate,
-						formone_punishievel: req.body.punishievel,
+						formone_lasick: req.body.formone_lasick,
+						formone_lapaper: req.body.formone_lapaper,
+						formone_laprivate: req.body.formone_laprivate,
+						formone_lalate: req.body.formone_lalat,
+						formone_laleave: req.body.formone_laleave,
+						formone_lababy: req.body.formone_lababy,
+						formone_lamonk: req.body.formone_lamonk,
+						formone_lamilitary: req.body.formone_lamilitary,
+						formone_historypromo: req.body.formone_historypromo,
+						formone_historypunish: req.body.formone_historypunish,
 						fk_formresult_id: formresult.id,
 					}
 					models.formone.create(formone).then(formone => {
@@ -171,20 +167,16 @@ exports.formone = async (req, res) => {
 				})
 			} else {
 				const formone = {
-					formone_lasick: req.body.lasick,
-					formone_lapaper: req.body.lapaper,
-					formone_laprivate: req.body.laprivate,
-					formone_lalate: req.body.lalate,
-					formone_laleave: req.body.laleave,
-					formone_lababy: req.body.lababy,
-					formone_lamonk: req.body.lamonk,
-					formone_lamilitary: req.body.lamilitary,
-					formone_budgetone: req.body.budgetone,
-					formone_budgettwo: req.body.budgettwo,
-					formone_promone: req.body.promone,
-					formone_promtwo: req.body.promtwo,
-					formone_punishdate: req.body.punishdate,
-					formone_punishievel: req.body.punishievel,
+					formone_lasick: req.body.formone_lasick,
+					formone_lapaper: req.body.formone_lapaper,
+					formone_laprivate: req.body.formone_laprivate,
+					formone_lalate: req.body.formone_lalat,
+					formone_laleave: req.body.formone_laleave,
+					formone_lababy: req.body.formone_lababy,
+					formone_lamonk: req.body.formone_lamonk,
+					formone_lamilitary: req.body.formone_lamilitary,
+					formone_historypromo: req.body.formone_historypromo,
+					formone_historypunish: req.body.formone_historypunish,
 				}
 				models.formone
 					.update(formone, {
