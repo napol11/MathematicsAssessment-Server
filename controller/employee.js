@@ -145,7 +145,7 @@ exports.formone = async (req, res) => {
 						formone_lasick: req.body.formone_lasick,
 						formone_lapaper: req.body.formone_lapaper,
 						formone_laprivate: req.body.formone_laprivate,
-						formone_lalate: req.body.formone_lalat,
+						formone_lalate: req.body.formone_lalate,
 						formone_laleave: req.body.formone_laleave,
 						formone_lababy: req.body.formone_lababy,
 						formone_lamonk: req.body.formone_lamonk,
@@ -170,7 +170,7 @@ exports.formone = async (req, res) => {
 					formone_lasick: req.body.formone_lasick,
 					formone_lapaper: req.body.formone_lapaper,
 					formone_laprivate: req.body.formone_laprivate,
-					formone_lalate: req.body.formone_lalat,
+					formone_lalate: req.body.formone_lalate,
 					formone_laleave: req.body.formone_laleave,
 					formone_lababy: req.body.formone_lababy,
 					formone_lamonk: req.body.formone_lamonk,
@@ -368,12 +368,10 @@ exports.dataFormfour = async (req, res) => {
 					})
 					.then(formfour => {
 						res.status(200).json({
-							data: [
-								{
-									form: form,
-									formfour: formfour,
-								},
-							],
+							data: {
+								form: form,
+								formfour: formfour,
+							},
 						})
 					})
 			}
