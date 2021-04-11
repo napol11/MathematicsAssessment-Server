@@ -116,10 +116,10 @@ exports.formfour = async (req, res) => {
 			where: {
 				[Op.and]: [
 					{
-						fk_assessment_id: employee_id,
+						fk_assessment_id: assessment_id,
 					},
 					{
-						fk_employee_id: assessment_id,
+						fk_employee_id: employee_id,
 					},
 				],
 			},
@@ -162,7 +162,6 @@ exports.formfour = async (req, res) => {
 										const formfourcommittee = {
 											formfour_comone: req.body.comone,
 											formfour_comtwo: req.body.comtwo,
-											fk_committee_id: req.body.committee_id,
 										}
 										models.formfour_committee
 											.update(formfourcommittee, {
@@ -199,6 +198,64 @@ exports.formfour = async (req, res) => {
 			res.status(500).send({
 				message: err.message || "ERROR",
 			})
+		})
+}
+
+//data form four by id coomittee
+exports.dataFormfourById = async (req, res) => {
+	const assessment_id = req.body.assessment_id
+	const employee_id = req.body.employee_id
+	const committee_id = req.body.committee_id
+
+	await models.formresult
+		.findOne({
+			where: {
+				[Op.and]: [
+					{
+						fk_assessment_id: assessment_id,
+					},
+					{
+						fk_employee_id: employee_id,
+					},
+				],
+			},
+		})
+		.then(formresult => {
+			if (!formresult) {
+				res.status(404).send({
+					message: "not found",
+				})
+			} else {
+				models.formfour
+					.findOne({
+						where: {
+							fk_formresult_id: formresult.id,
+						},
+					})
+					.then(formfour => {
+						// res.status(200).json({
+						// 	data: formfour,
+						// })
+						models.formfour_committee
+							.findOne({
+								where: {
+									[Op.and]: [
+										{
+											fk_formfour_id: formfour.id,
+										},
+										{
+											fk_committee_id: committee_id,
+										},
+									],
+								},
+							})
+							.then(formfour_committee => {
+								res.status(200).json({
+									data: formfour_committee,
+								})
+							})
+					})
+			}
 		})
 }
 
@@ -241,12 +298,10 @@ exports.dataFormfour = async (req, res) => {
 							})
 							.then(formfour_committee => {
 								res.status(200).json({
-									data: [
-										{
-											formfour: formfour,
-											formfour_committee: formfour_committee,
-										},
-									],
+									data: {
+										formfour: formfour,
+										formfour_committee: formfour_committee,
+									},
 								})
 							})
 					})
