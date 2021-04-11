@@ -367,12 +367,18 @@ exports.dataFormfour = async (req, res) => {
 						},
 					})
 					.then(formfour => {
-						res.status(200).json({
-							data: {
-								form: form,
-								formfour: formfour,
-							},
-						})
+						if (!formfour) {
+							res.status(404).send({
+								message: "not found",
+							})
+						} else {
+							res.status(200).json({
+								data: {
+									form: form,
+									formfour: formfour,
+								},
+							})
+						}
 					})
 			}
 		})

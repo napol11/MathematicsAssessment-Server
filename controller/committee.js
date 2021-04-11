@@ -1,5 +1,5 @@
 const models = require("../models/index")
-const { Op } = require("sequelize")
+const { Op, and } = require("sequelize")
 
 // list assessment
 exports.listassessmentAll = async (req, res) => {
@@ -565,4 +565,47 @@ exports.dataFormtwo = async (req, res) => {
 				message: err.message || "ERROR",
 			})
 		})
+}
+
+// list now assessment and emplotyee
+exports.assessment = async (req, res) => {
+	const nowDate = new Date()
+
+	await models.assessment.findAll().then(assessment => {
+		const timestart = assessment.filter(v => new Date(v.assessment_end) > nowDate)
+		if (timestart) {
+			const time = timestart.filter(v => nowDate < new Date(v.assessment_endedit))
+			if (time.length > 0) {
+				models.formresult
+					.findAll({
+						where: {
+							fk_assessment_id: time[0].id,
+						},
+					})
+					.then(formresult => {
+						models.employee.findAll().then(employee => {
+							let dataemployee = []
+							// const employeeAll = formresult.map(formresult => employee.filter(employee => employee.id == formresult.fk_employee_id))
+							for (let i = 0; i < formresult.length; i++) {
+								const employeeAll = employee.filter(employee => employee.id == formresult[i].fk_employee_id)
+								dataemployee.push(employeeAll)
+							}
+							res.json({
+								data: {
+									// employee: employeeAll,
+									employee: dataemployee,
+									time: time,
+									formresult: formresult,
+								},
+							})
+						})
+					})
+					.catch(err => {
+						res.status(500).send({
+							message: err.message || "ERROR",
+						})
+					})
+			}
+		}
+	})
 }

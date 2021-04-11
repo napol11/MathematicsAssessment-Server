@@ -4,7 +4,7 @@ const router = express.Router()
 const committeeController = require("../controller/committee")
 
 //list assessment
-router.get("/assessment", committeeController.listassessmentAll)
+// router.get("/assessment", committeeController.listassessmentAll)
 
 //list employee
 router.post("/employee", committeeController.employeeAll)
@@ -29,5 +29,8 @@ router.post("/formtwo", committeeController.formtwo)
 
 // data form two
 router.post("/dataFormtwo", committeeController.dataFormtwo)
+
+// list now assessment and emplotyee
+router.get("/assessment", committeeController.assessment)
 
 module.exports = router
