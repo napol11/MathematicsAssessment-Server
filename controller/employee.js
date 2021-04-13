@@ -431,18 +431,14 @@ exports.formtwo = async (req, res) => {
 
 								models.formtwo.create(formtwo).then(formtwo => {
 									res.status(200).json({
-										data: [
-											{
-												formtwo: formtwo,
-											},
-										],
+										data: "Successfully",
 									})
 								})
 							}
 						} else {
 							models.formtwo.destroy({
 								where: {
-									fk_formthreeresult_id: findformtwo.id,
+									fk_formresult_id: findresult.id,
 								},
 							})
 							var i
@@ -458,11 +454,7 @@ exports.formtwo = async (req, res) => {
 								}
 								models.formtwo.create(formtwo).then(formtwo => {
 									res.status(200).json({
-										data: [
-											{
-												formtwo: formtwo,
-											},
-										],
+										data: "Successfully",
 									})
 								})
 							}
@@ -513,11 +505,9 @@ exports.dataFormtwo = async (req, res) => {
 					})
 					.then(formtwo => {
 						res.status(200).json({
-							data: [
-								{
-									formtwo: formtwo,
-								},
-							],
+							data: {
+								formtwo: formtwo,
+							},
 						})
 					})
 			}

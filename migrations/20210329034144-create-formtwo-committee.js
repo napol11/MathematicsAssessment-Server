@@ -11,6 +11,9 @@ module.exports = {
 			fk_formtwo_id: {
 				type: Sequelize.INTEGER,
 			},
+			formtwo_table: {
+				type: Sequelize.INTEGER,
+			},
 			fk_committee_id: {
 				type: Sequelize.INTEGER,
 			},
