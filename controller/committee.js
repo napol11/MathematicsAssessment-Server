@@ -356,21 +356,16 @@ exports.formthree = async (req, res) => {
 							}
 							var i
 							models.formthree_result.create(formthreeresult).then(formthreeresult => {
-								for (i = 0; i < req.body.test.length; i++) {
+								for (i = 0; i < req.body.formthree.length; i++) {
 									const formthree = {
-										formthree_num: req.body.test[i].formthree_num,
-										formthree_score: req.body.test[i].formthree_score,
-										formthree_comment: req.body.test[i].formthree_comment,
+										formthree_num: req.body.formthree[i].formthree_num,
+										formthree_score: req.body.formthree[i].formthree_score,
+										formthree_comment: req.body.formthree[i].formthree_comment,
 										fk_formthreeresult_id: formthreeresult.id,
 									}
 									models.formthree.create(formthree).then(formthree => {
 										res.status(200).json({
-											data: [
-												{
-													formthreeresult: formthreeresult,
-													formthree: formthree,
-												},
-											],
+											data: "Successfully",
 										})
 									})
 								}
@@ -379,6 +374,18 @@ exports.formthree = async (req, res) => {
 							models.formthree.destroy({
 								where: {
 									fk_formthreeresult_id: findformthreeresult.id,
+								},
+							})
+							models.formthree_result.destroy({
+								where: {
+									[Op.and]: [
+										{
+											fk_formresult_id: findresult.id,
+										},
+										{
+											fk_committee_id: committee_id,
+										},
+									],
 								},
 							})
 							const formthreeresult = {
