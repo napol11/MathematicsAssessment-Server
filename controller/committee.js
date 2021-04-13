@@ -483,6 +483,7 @@ exports.dataFromthree = async (req, res) => {
 exports.formtwo = async (req, res) => {
 	const assessment_id = req.body.assessment_id
 	const employee_id = req.body.employee_id
+	const committee_id = req.body.committee_id
 
 	await models.formresult
 		.findOne({
@@ -499,66 +500,54 @@ exports.formtwo = async (req, res) => {
 		})
 		.then(findresult => {
 			if (findresult) {
-				models.formtwo
-					.findAll({
+				models.formtwo_committee
+					.findOne({
 						where: {
 							fk_formresult_id: findresult.id,
 						},
 					})
-					.then(findformtwo => {
-						if (findformtwo.length > 0) {
-							models.formtwo_committee
-								.findAll({
-									where: {
-										fk_formtwo_id: findformtwo.id,
-									},
+					.then(findformtwoCom => {
+						if (!findformtwoCom) {
+							var i
+							for (i = 0; i < req.body.formtwo.length; i++) {
+								const formtwo = {
+									formtwo_table: req.body.formtwo[i].formtwo_table,
+									formtwo_sucesscom: req.body.formtwo[i].formtwo_table,
+									fk_formresult_id: findresult.id,
+									fk_committee_id: committee_id,
+								}
+								models.formtwo_committee.create(formtwo).then(formtwo_committee => {
+									res.status(200).json({
+										data: "Successfully",
+									})
 								})
-								.then(findformtwoCom => {
-									if (findformtwoCom.length == 0) {
-										var i
-										for (i = 0; i < req.body.formtwo.length; i++) {
-											const formtwo_committee = {
-												fk_formtwo_id: findformtwo.id,
-												fk_committee_id: req.body.formtwo[i].committee_id,
-												formtwo_sucesscom: req.body.formtwo[i].formtwo_sucesscom,
-											}
-											models.formtwo_committee.create(formtwo_committee).then(formtwoCom => {
-												res.status(200).json({
-													data: [
-														{
-															formtwo: findformtwo,
-															formtwo_committee: formtwoCom,
-														},
-													],
-												})
-											})
-										}
-									} else {
-										models.formtwo_committee.destroy({
-											where: {
-												fk_committee_id: req.body.committee_id,
-											},
-										})
-										var i
-										for (i = 0; i < req.body.formtwo.length; i++) {
-											const formtwo_committee = {
-												fk_formtwo_id: findformtwo.id,
-												fk_committee_id: req.body.formtwo[i].committee_id,
-												formtwo_sucesscom: req.body.formtwo[i].formtwo_sucesscom,
-											}
-											models.formtwo_committee.create(formtwo_committee).then(formtwoCom => {
-												res.status(200).json({
-													data: [
-														{
-															formtwo: findformtwo,
-															formtwo_committee: formtwoCom,
-														},
-													],
-												})
-											})
-										}
-									}
+							}
+						} else {
+							models.formtwo_committee.destroy({
+								where: {
+									[Op.and]: [
+										{
+											fk_formresult_id: findresult.id,
+										},
+										{
+											fk_committee_id: committee_id,
+										},
+									],
+								},
+							})
+							for (i = 0; i < req.body.formtwo.length; i++) {
+								const formtwo = {
+									formtwo_table: req.body.formtwo[i].formtwo_table,
+									formtwo_sucesscom: req.body.formtwo[i].formtwo_table,
+									fk_formresult_id: findresult.id,
+									fk_committee_id: committee_id,
+								}
+								models.formtwo_committee.create(formtwo).then(formtwo_committee => {
+									res.status(200).json({
+										data: "Successfully",
+									})
 								})
+							}
 						}
 					})
 			} else {
@@ -574,10 +563,11 @@ exports.formtwo = async (req, res) => {
 		})
 }
 
-// data form two
+// data form two by ID
 exports.dataFormtwo = async (req, res) => {
 	const assessment_id = req.body.assessment_id
 	const employee_id = req.body.employee_id
+	const committee_id = req.body.committee_id
 
 	await models.formresult
 		.findOne({
@@ -598,23 +588,29 @@ exports.dataFormtwo = async (req, res) => {
 					message: "not found",
 				})
 			} else {
-				models.formtwo
+				models.formtwo_committee
 					.findAll({
-						where: {
-							fk_formresult_id: form.id,
-						},
+						[Op.and]: [
+							{
+								fk_assessment_id: assessment_id,
+							},
+							{
+								fk_committee_id: committee_id,
+							},
+						],
 					})
 					.then(formtwo => {
 						res.status(200).json({
-							data: [
-								{
-									formtwo: formtwo,
-								},
-							],
+							data: {
+								formtwoCOM: formtwo,
+							},
 						})
 					})
 			}
 		})
+		// .then(form => {
+
+		// })
 		.catch(err => {
 			res.status(500).send({
 				message: err.message || "ERROR",

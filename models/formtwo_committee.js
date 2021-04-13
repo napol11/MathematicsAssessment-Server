@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
 	}
 	formtwo_committee.init(
 		{
-			fk_formtwo_id: DataTypes.INTEGER,
+			fk_formresult_id: DataTypes.INTEGER,
 			formtwo_table: DataTypes.INTEGER,
 			fk_committee_id: DataTypes.INTEGER,
 			formtwo_sucesscom: DataTypes.INTEGER,

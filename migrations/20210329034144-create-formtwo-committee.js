@@ -8,7 +8,7 @@ module.exports = {
 				primaryKey: true,
 				type: Sequelize.INTEGER,
 			},
-			fk_formtwo_id: {
+			fk_formresult_id: {
 				type: Sequelize.INTEGER,
 			},
 			formtwo_table: {
