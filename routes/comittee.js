@@ -27,6 +27,9 @@ router.post("/formthree", committeeController.formthree)
 // data form three
 router.post("/dataFromthree", committeeController.dataFromthree)
 
+// data form three by ID
+router.post("/dataFromthreeById", committeeController.dataFromthreeById)
+
 // form two
 router.post("/formtwo", committeeController.formtwo)
 

@@ -428,6 +428,55 @@ exports.formthree = async (req, res) => {
 		})
 }
 
+//list form three by ID
+exports.dataFromthreeById = async (req, res) => {
+	const assessment_id = req.body.assessment_id
+	const employee_id = req.body.employee_id
+	const committee_id = req.body.committee_id
+
+	await models.formresult
+		.findOne({
+			where: {
+				[Op.and]: [
+					{
+						fk_assessment_id: assessment_id,
+					},
+					{
+						fk_employee_id: employee_id,
+					},
+				],
+			},
+		})
+		.then(findresult => {
+			models.formthree_result
+				.findOne({
+					where: {
+						[Op.and]: [
+							{
+								fk_formresult_id: findresult.id,
+							},
+							{
+								fk_committee_id: committee_id,
+							},
+						],
+					},
+				})
+				.then(findthreeresult => {
+					models.formthree
+						.findAll({
+							where: {
+								fk_formthreeresult_id: findthreeresult.id,
+							},
+						})
+						.then(data => {
+							res.status(200).json({
+								data: data,
+							})
+						})
+				})
+		})
+}
+
 //list form three
 exports.dataFromthree = async (req, res) => {
 	const assessment_id = req.body.assessment_id
@@ -545,7 +594,7 @@ exports.formtwo = async (req, res) => {
 							for (i = 0; i < req.body.formtwo.length; i++) {
 								const formtwo = {
 									formtwo_table: req.body.formtwo[i].formtwo_table,
-									formtwo_sucesscom: req.body.formtwo[i].formtwo_table,
+									formtwo_sucesscom: req.body.formtwo[i].formtwo_sucesscom,
 									fk_formresult_id: findresult.id,
 									fk_committee_id: committee_id,
 								}
