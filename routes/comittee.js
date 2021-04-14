@@ -36,6 +36,9 @@ router.post("/formtwo", committeeController.formtwo)
 // data form two
 router.post("/dataFormtwo", committeeController.dataFormtwo)
 
+// data form two COMALL
+router.post("/dataFormtwoAll", committeeController.dataFormtwoAll)
+
 // list now assessment and emplotyee
 router.get("/assessment", committeeController.assessment)
 

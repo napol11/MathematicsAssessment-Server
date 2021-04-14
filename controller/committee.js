@@ -721,3 +721,36 @@ exports.assessment = async (req, res) => {
 		}
 	})
 }
+
+//data form two All
+exports.dataFormtwoAll = async (req, res) => {
+	const assessment_id = req.body.assessment_id
+	const employee_id = req.body.employee_id
+
+	await models.formresult
+		.findOne({
+			where: {
+				[Op.and]: [
+					{
+						fk_assessment_id: assessment_id,
+					},
+					{
+						fk_employee_id: employee_id,
+					},
+				],
+			},
+		})
+		.then(result => {
+			models.formtwo_committee
+				.findAll({
+					where: {
+						fk_formresult_id: result.id,
+					},
+				})
+				.then(formtwo => {
+					res.status(200).json({
+						data: formtwo,
+					})
+				})
+		})
+}
