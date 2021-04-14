@@ -1,5 +1,6 @@
 const models = require("../models/index")
 const bcrypt = require("bcrypt")
+const saltRounds = 10
 
 exports.login = async (req, res) => {
 	const username = req.body.username
@@ -48,6 +49,45 @@ exports.login = async (req, res) => {
 					})
 				}
 			})
+		})
+		.catch(err => {
+			res.status(500).send({
+				message: err.message || "ERROR",
+			})
+		})
+}
+
+//reset passwork
+exports.resetPass = async (req, res) => {
+	const employee_id = req.body.employee_id
+	const password = req.body.password
+	const encryptedPassword = await bcrypt.hash(password, saltRounds)
+	const resetPass = {
+		password: encryptedPassword,
+	}
+	await models.employee
+		.findByPk(employee_id)
+		.then(data => {
+			models.user
+				.update(resetPass, {
+					where: { id: data.fk_user_id },
+				})
+				.then(num => {
+					if (num == 1) {
+						res.send({
+							message: "Update Sussessfully",
+						})
+					} else {
+						res.send({
+							message: "Cannot Update",
+						})
+					}
+				})
+				.catch(err => {
+					res.status(500).send({
+						message: err.message || "ERROR",
+					})
+				})
 		})
 		.catch(err => {
 			res.status(500).send({

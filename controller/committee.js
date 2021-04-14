@@ -509,11 +509,7 @@ exports.dataFromthree = async (req, res) => {
 								const formthreeCom = formthree_result.map(formthree_result => formthree.filter(formthree => formthree.fk_formthreeresult_id == formthree_result.id))
 
 								res.json({
-									data: [
-										{
-											formthreeCom: formthreeCom,
-										},
-									],
+									data: formthreeCom,
 								})
 							})
 						} else {
@@ -754,3 +750,35 @@ exports.dataFormtwoAll = async (req, res) => {
 				})
 		})
 }
+
+// list form three all
+// exports.dataFormthreeAll = async (req, res) => {
+// 	const assessment_id = req.body.assessment_id
+// 	const employee_id = req.body.employee_id
+// 	await models.formresult
+// 		.findOne({
+// 			where: {
+// 				[Op.and]: [
+// 					{
+// 						fk_assessment_id: assessment_id,
+// 					},
+// 					{
+// 						fk_employee_id: employee_id,
+// 					},
+// 				],
+// 			},
+// 		})
+// 		.then(data => {
+// 			models.formthree_result
+// 				.findAll({
+// 					where: {
+// 						fk_formresult_id: data.id,
+// 					},
+// 				})
+// 				.then(threeresult => {
+// 					res.status(200).json({
+// 						data: threeresult,
+// 					})
+// 				})
+// 		})
+// }
