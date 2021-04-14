@@ -644,16 +644,21 @@ exports.dataFormtwo = async (req, res) => {
 					message: "not found",
 				})
 			} else {
+				// res.status(200).json({
+				// 	data: form.id,
+				// })
 				models.formtwo_committee
 					.findAll({
-						[Op.and]: [
-							{
-								fk_assessment_id: assessment_id,
-							},
-							{
-								fk_committee_id: committee_id,
-							},
-						],
+						where: {
+							[Op.and]: [
+								{
+									fk_formresult_id: form.id,
+								},
+								{
+									fk_committee_id: committee_id,
+								},
+							],
+						},
 					})
 					.then(formtwo => {
 						res.status(200).json({

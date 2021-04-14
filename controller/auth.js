@@ -24,25 +24,21 @@ exports.login = async (req, res) => {
 					if (user.role == 1) {
 						models.committee.findOne({ where: { fk_user_id: user.id } }).then(committee => {
 							res.status(200).json({
-								data: [
-									{
-										profile: committee,
-										user: user,
-										role: user.role, // 1. committee 2. employee
-									},
-								],
+								data: {
+									profile: committee,
+									user: user,
+									role: user.role, // 1. committee 2. employee
+								},
 							})
 						})
 					} else {
 						models.employee.findOne({ where: { fk_user_id: user.id } }).then(employee => {
 							res.status(200).json({
-								data: [
-									{
-										profile: employee,
-										user: user,
-										role: user.role, // 1. committee 2. employee
-									},
-								],
+								data: {
+									profile: employee,
+									user: user,
+									role: user.role, // 1. committee 2. employee
+								},
 							})
 						})
 					}
