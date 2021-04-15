@@ -57,8 +57,8 @@ exports.login = async (req, res) => {
 		})
 }
 
-//reset passwork
-exports.resetPass = async (req, res) => {
+//Change  passwork
+exports.changepass = async (req, res) => {
 	const employee_id = req.body.employee_id
 	const password = req.body.password
 	const encryptedPassword = await bcrypt.hash(password, saltRounds)

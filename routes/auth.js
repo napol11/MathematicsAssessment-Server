@@ -7,6 +7,6 @@ const authController = require("../controller/auth")
 router.post("/login", authController.login)
 
 //reset
-router.post("/resetPass", authController.resetPass)
+router.put("/changepass", authController.changepass)
 
 module.exports = router
