@@ -110,6 +110,7 @@ exports.dataFormone = async (req, res) => {
 exports.formfour = async (req, res) => {
 	const employee_id = req.body.employee_id
 	const assessment_id = req.body.assessment_id
+	const committee_id = req.body.committee_id
 
 	await models.formresult
 		.findOne({
@@ -137,7 +138,14 @@ exports.formfour = async (req, res) => {
 							models.formfour_committee
 								.findOne({
 									where: {
-										fk_formfour_id: findformfour.id,
+										[Op.and]: [
+											{
+												fk_formfour_id: findformfour.id,
+											},
+											{
+												fk_committee_id: committee_id,
+											},
+										],
 									},
 								})
 								.then(findformfourCom => {
@@ -145,7 +153,7 @@ exports.formfour = async (req, res) => {
 										const formfourcommittee = {
 											formfour_comone: req.body.comone,
 											formfour_comtwo: req.body.comtwo,
-											fk_committee_id: req.body.committee_id,
+											fk_committee_id: committee_id,
 											fk_formfour_id: findformfour.id,
 										}
 										models.formfour_committee.create(formfourcommittee).then(formfour_committee => {
@@ -371,48 +379,57 @@ exports.formthree = async (req, res) => {
 								}
 							})
 						} else {
+							// res.json({
+							// 	data: findformthreeresult.id,
+							// })
 							models.formthree.destroy({
 								where: {
 									fk_formthreeresult_id: findformthreeresult.id,
 								},
 							})
-							models.formthree_result.destroy({
-								where: {
-									[Op.and]: [
-										{
-											fk_formresult_id: findresult.id,
-										},
-										{
-											fk_committee_id: committee_id,
-										},
-									],
-								},
+							res.json({
+								data: findformthreeresult,
 							})
-							const formthreeresult = {
-								fk_formresult_id: findresult.id,
-								fk_committee_id: committee_id,
-							}
+							// models.formthree.destroy({
+							// 	where: {
+							// 		// [Op.and]: [
+							// 		// 	{
+							// 		// 		fk_formthreeresult_id: findformthreeresult.id,
+							// 		// 	},
+							// 		// 	{
+							// 		// 		fk_committee_id: committee_id,
+							// 		// 	},
+							// 		// ],
+							// 		fk_formthreeresult_id: findformthreeresult.id,
+							// 	},
+							// })
+							// // const formthreeresult = {
+							// // 	fk_formresult_id: findresult.id,
+							// // 	fk_committee_id: committee_id,
+							// // }
 							var i
-							models.formthree_result.create(formthreeresult).then(formthreeresult => {
-								for (i = 0; i < req.body.formthree.length; i++) {
-									const formthree = {
-										formthree_num: req.body.formthree[i].formthree_num,
-										formthree_score: req.body.formthree[i].formthree_score,
-										formthree_comment: req.body.formthree[i].formthree_comment,
-										fk_formthreeresult_id: formthreeresult.id,
-									}
-									models.formthree.create(formthree).then(formthree => {
+							// models.formthree_result.create(formthreeresult).then(formthreeresult => {
+							for (i = 0; i < req.body.formthree.length; i++) {
+								const formthree = {
+									formthree_num: req.body.formthree[i].formthree_num,
+									formthree_score: req.body.formthree[i].formthree_score,
+									formthree_comment: req.body.formthree[i].formthree_comment,
+									fk_formthreeresult_id: findformthreeresult.id,
+								}
+								models.formthree
+									.create(formthree)
+									.then(formthree => {
 										res.status(200).json({
-											data: [
-												{
-													formthreeresult: formthreeresult,
-													formthree: formthree,
-												},
-											],
+											data: "Successfully",
 										})
 									})
-								}
-							})
+									.catch(err => {
+										res.status(500).send({
+											message: err.message || "ERROR",
+										})
+									})
+							}
+							// })
 						}
 					})
 			} else {
@@ -680,9 +697,9 @@ exports.assessment = async (req, res) => {
 	const nowDate = new Date()
 
 	await models.assessment.findAll().then(assessment => {
-		const timestart = assessment.filter(v => new Date(v.assessment_end) > nowDate)
+		const timestart = assessment.filter(v => new Date(v.assessment_endedit) < nowDate)
 		if (timestart) {
-			const time = timestart.filter(v => nowDate < new Date(v.assessment_endedit))
+			const time = timestart.filter(v => nowDate < new Date(v.assessment_end))
 			if (time.length > 0) {
 				models.formresult
 					.findAll({
@@ -713,6 +730,10 @@ exports.assessment = async (req, res) => {
 							message: err.message || "ERROR",
 						})
 					})
+			} else {
+				res.status(404).send({
+					message: "not found",
+				})
 			}
 		}
 	})
