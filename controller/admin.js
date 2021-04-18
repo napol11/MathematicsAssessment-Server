@@ -70,7 +70,7 @@ exports.committeeUpdate = async (req, res) => {
 		committee_firstname: req.body.firstname,
 		committee_lastname: req.body.lastname,
 		committee_position: req.body.position,
-		committeecol_tel: req.body.tel,
+		committee_tel: req.body.tel,
 		committee_status: req.body.status,
 		email: req.body.email,
 	}
