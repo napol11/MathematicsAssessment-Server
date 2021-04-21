@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 
 const employeeController = require("../controller/employee")
+const upload = require("../utils/multer")
 
 // list data employee
 router.get("/employee/:id", employeeController.dataEmployee)
@@ -32,5 +33,13 @@ router.post("/formtwo", employeeController.formtwo)
 
 // data form two
 router.post("/dataFormtwo", employeeController.dataFormtwo)
+
+// file upload
+router.post("/upload", upload.upload.array("files", 5), (req, res) => {
+	res.status(200).json({
+		data: "Upload Success",
+		file: req.files,
+	})
+})
 
 module.exports = router
