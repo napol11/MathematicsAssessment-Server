@@ -17,8 +17,20 @@ module.exports = {
 			doc_filetype: {
 				type: Sequelize.STRING,
 			},
+			doc_path: {
+				type: Sequelize.STRING,
+			},
+			fk_result_id: {
+				type: Sequelize.INTEGER,
+			},
+			doc_originalname: {
+				type: Sequelize.STRING,
+			},
 			doc_timecreate: {
 				type: Sequelize.DATE,
+			},
+			table: {
+				type: Sequelize.INTEGER,
 			},
 			//   createdAt: {
 			//     allowNull: false,
