@@ -126,7 +126,7 @@ router.post("/upload", upload.upload.array("files", 5), async (req, res) => {
 })
 
 // getfile All
-router.get("/file", employeeController.getFile)
+router.post("/file", employeeController.getFile)
 
 // download file
 router.get("/file/:id", employeeController.downloadfile)

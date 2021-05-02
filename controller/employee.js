@@ -570,7 +570,7 @@ exports.getFile = async (req, res) => {
 
 exports.downloadfile = async (req, res) => {
 	await models.doc
-		.findByPk(req.params.id)
+		.findOne({ where: { doc_name: req.params.id } })
 		.then(file => {
 			res.download(`./${file.doc_path}`)
 		})
