@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const models = require("../models/index")
 const { Op } = require("sequelize")
+const fs = require("fs")
 
 const employeeController = require("../controller/employee")
 const upload = require("../utils/multer")
@@ -41,14 +42,6 @@ router.post("/upload", upload.upload.array("files", 5), async (req, res) => {
 	const assessment_id = req.body.id_assessment
 	const employee_id = req.body.id_employee
 	const table = req.body.table
-
-	// console.log(req.body)
-	// console.log(req.files)
-	// res.status(200).json({
-	// 	data: "Upload Success",
-	// })
-	// console.log(req.file)
-	// console.log(req.files.file)
 
 	await models.formresult
 		.findOne({
@@ -129,6 +122,34 @@ router.post("/upload", upload.upload.array("files", 5), async (req, res) => {
 						}
 					}
 				})
+		})
+})
+
+// getfile All
+router.get("/file", employeeController.getFile)
+
+// download file
+router.get("/file/:id", employeeController.downloadfile)
+
+// delect file
+router.route("/file/:id").patch(async (req, res) => {
+	await models.doc
+		.findByPk(req.params.id)
+		.then(file => {
+			fs.unlinkSync(file.doc_path)
+			models.doc.destroy({
+				where: {
+					id: req.params.id,
+				},
+			})
+			res.status(200).json({
+				status: true,
+				data: "delete file message",
+			})
+		})
+		.catch(err => {
+			console.log(err)
+			res.status(500).json({ status: false, message: "internal server error" })
 		})
 })
 

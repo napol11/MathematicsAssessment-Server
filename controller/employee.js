@@ -518,3 +518,64 @@ exports.dataFormtwo = async (req, res) => {
 			})
 		})
 }
+
+exports.getFile = async (req, res) => {
+	const assessment_id = req.body.assessment_id
+	const employee_id = req.body.employee_id
+
+	await models.formresult
+		.findOne({
+			where: {
+				[Op.and]: [
+					{
+						fk_assessment_id: assessment_id,
+					},
+					{
+						fk_employee_id: employee_id,
+					},
+				],
+			},
+		})
+		.then(result => {
+			if (!result) {
+				res.status(404).send({
+					message: "not found",
+				})
+			} else {
+				models.doc
+					.findAll({
+						where: {
+							fk_result_id: result.id,
+						},
+					})
+					.then(file => {
+						if (file.length > 0) {
+							res.status(200).json({
+								data: file,
+							})
+						} else {
+							res.status(200).json({
+								data: "not found file",
+							})
+						}
+					})
+			}
+		})
+		.catch(err => {
+			res.status(500).send({
+				message: err.message || "ERROR",
+			})
+		})
+}
+
+exports.downloadfile = async (req, res) => {
+	await models.doc
+		.findByPk(req.params.id)
+		.then(file => {
+			res.download(`./${file.doc_path}`)
+		})
+		.catch(err => {
+			console.log(err)
+			res.status(500).json({ status: false, message: "internal server error" })
+		})
+}
