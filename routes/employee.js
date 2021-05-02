@@ -42,6 +42,7 @@ router.post("/upload", upload.upload.array("files", 5), async (req, res) => {
 	const assessment_id = req.body.id_assessment
 	const employee_id = req.body.id_employee
 	const table = req.body.table
+	const form = req.body.form
 
 	await models.formresult
 		.findOne({
@@ -60,7 +61,17 @@ router.post("/upload", upload.upload.array("files", 5), async (req, res) => {
 			models.doc
 				.findAll({
 					where: {
-						fk_result_id: result.id,
+						[Op.and]: [
+							{
+								fk_result_id: result.id,
+							},
+							{
+								table: table,
+							},
+							{
+								form: form,
+							},
+						],
 					},
 				})
 				.then(findDoc => {
@@ -75,6 +86,7 @@ router.post("/upload", upload.upload.array("files", 5), async (req, res) => {
 								fk_result_id: result.id,
 								doc_originalname: req.files[i].originalname,
 								table: table,
+								form: form,
 							}
 
 							models.doc.create(doc).then(doc => {
@@ -96,6 +108,9 @@ router.post("/upload", upload.upload.array("files", 5), async (req, res) => {
 									{
 										table: table,
 									},
+									{
+										form: form,
+									},
 								],
 							},
 						})
@@ -109,6 +124,7 @@ router.post("/upload", upload.upload.array("files", 5), async (req, res) => {
 								fk_result_id: result.id,
 								doc_originalname: req.files[i].originalname,
 								table: table,
+								form: form,
 							}
 
 							models.doc.create(doc).then(doc => {

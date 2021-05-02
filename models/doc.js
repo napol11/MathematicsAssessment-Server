@@ -16,11 +16,11 @@ module.exports = (sequelize, DataTypes) => {
 			doc_name: DataTypes.STRING,
 			doc_filesize: DataTypes.INTEGER,
 			doc_filetype: DataTypes.STRING,
-			doc_timecreate: DataTypes.DATE,
 			doc_path: DataTypes.STRING,
 			fk_result_id: DataTypes.INTEGER,
 			doc_originalname: DataTypes.STRING,
 			table: DataTypes.INTEGER,
+			form: DataTypes.INTEGER,
 		},
 		{
 			sequelize,

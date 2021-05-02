@@ -26,10 +26,10 @@ module.exports = {
 			doc_originalname: {
 				type: Sequelize.STRING,
 			},
-			doc_timecreate: {
-				type: Sequelize.DATE,
-			},
 			table: {
+				type: Sequelize.INTEGER,
+			},
+			form: {
 				type: Sequelize.INTEGER,
 			},
 			//   createdAt: {
