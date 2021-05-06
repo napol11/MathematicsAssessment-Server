@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "assessment-pj",
-    "host": "127.0.0.1",
+    "username": "bf14c7d5c049af",
+    "password": "825e0901",
+    "database": "heroku_973b1ada62c17c0",
+    "host": "us-cdbr-east-03.cleardb.com",
     "dialect": "mysql",
     "port" : "3306"
   },
