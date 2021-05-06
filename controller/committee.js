@@ -803,3 +803,125 @@ exports.dataFormtwoAll = async (req, res) => {
 // 				})
 // 		})
 // }
+
+//form 4 Head post
+exports.formfourhead = async (req, res) => {
+	const assessment_id = req.body.assessment_id
+	const employee_id = req.body.employee_id
+	const committee_id = req.body.committee_id
+
+	await models.formresult
+		.findOne({
+			where: {
+				[Op.and]: [
+					{
+						fk_assessment_id: assessment_id,
+					},
+					{
+						fk_employee_id: employee_id,
+					},
+				],
+			},
+		})
+		.then(result => {
+			models.formresultHead
+				.findOne({
+					where: {
+						// [Op.and]: [
+						// 	{
+						// 		fk_formresult_id: result.id,
+						// 	},
+						// 	{
+						// 		fk_committee_id: committee_id,
+						// 	},
+						// ],
+
+						fk_formresult_id: result.id,
+					},
+				})
+				.then(head => {
+					// console.log(head)
+					if (!head) {
+						const form = {
+							grad: req.body.grad,
+							pass: req.body.pass,
+							salary: req.body.salary,
+							fk_formresult_id: result.id,
+							fk_committee_id: committee_id,
+						}
+
+						models.formresultHead.create(form).then(form => {
+							res.status(200).json({
+								data: form,
+							})
+						})
+					} else {
+						const form = {
+							grad: req.body.grad,
+							pass: req.body.pass,
+							salary: req.body.salary,
+						}
+						models.formresultHead
+							.update(form, {
+								where: { fk_formresult_id: result.id },
+							})
+							.then(num => {
+								if (num == 1) {
+									res.send({
+										message: "Update Sussessfully",
+									})
+								} else {
+									res.send({
+										message: "Cannot Update",
+									})
+								}
+							})
+							.catch(err => {
+								res.status(500).send({
+									message: err.message || "ERROR",
+								})
+							})
+					}
+				})
+		})
+}
+
+//list form result head
+exports.dataresultHead = async (req, res) => {
+	const assessment_id = req.body.assessment_id
+	const employee_id = req.body.employee_id
+	const committee_id = req.body.committee_id
+
+	await models.formresult
+		.findOne({
+			where: {
+				[Op.and]: [
+					{
+						fk_assessment_id: assessment_id,
+					},
+					{
+						fk_employee_id: employee_id,
+					},
+				],
+			},
+		})
+		.then(result => {
+			models.formresultHead
+				.findOne({
+					where: {
+						fk_formresult_id: result.id,
+					},
+				})
+				.then(data => {
+					if (!data) {
+						res.status(404).json({
+							data: "not fould",
+						})
+					} else {
+						res.status(200).json({
+							data: data,
+						})
+					}
+				})
+		})
+}

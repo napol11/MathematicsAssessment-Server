@@ -42,4 +42,10 @@ router.post("/dataFormtwoAll", committeeController.dataFormtwoAll)
 // list now assessment and emplotyee
 router.get("/assessment", committeeController.assessment)
 
+//form  result head
+router.post("/resulthead", committeeController.formfourhead)
+
+// data result head
+router.post("/dataresulthead", committeeController.dataresultHead)
+
 module.exports = router

@@ -1,5 +1,5 @@
 {
-  "development": {
+  "development1": {
     "username": "bf14c7d5c049af",
     "password":825e0901,
     "database": "heroku_973b1ada62c17c0",
@@ -7,7 +7,7 @@
     "dialect": "mysql",
     "port" : "3306"
   },
-  "development1": {
+  "development": {
     "username": "root",
     "password": null,
     "database": "assessment-pj",
