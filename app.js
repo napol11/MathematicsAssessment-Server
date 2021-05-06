@@ -11,7 +11,7 @@ const admin = require("./routes/admin")
 const auth = require("./routes/auth")
 const employee = require("./routes/employee")
 const committee = require("./routes/comittee")
-const PORT = process.env.PORT || 3001
+// const PORT = process.env.PORT || 3001
 
 var app = express()
 
@@ -36,8 +36,8 @@ app.use("/api/auth", auth)
 app.use("/api/employee", employee)
 app.use("/api/committee", committee)
 
-app.listen(PORT, () => {
-    console.log(`Serve is runing port ${PORT}`)
-})
+// app.listen(PORT, () => {
+//     console.log(`Serve is runing port ${PORT}`)
+// })
 
 module.exports = app
