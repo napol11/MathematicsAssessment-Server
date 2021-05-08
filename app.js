@@ -16,7 +16,7 @@ const committee = require("./routes/comittee")
 var app = express()
 
 // // Set portnumber
-const port = process.env.PORT || 300
+const port = process.env.PORT || 5000
 
 // // Start Server
 // app.listen(portnumber, () => {
