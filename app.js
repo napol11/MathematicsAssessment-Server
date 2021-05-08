@@ -16,7 +16,7 @@ const committee = require("./routes/comittee")
 var app = express()
 
 // // Set portnumber
-// const portnumber = process.env.PORT || 3001
+const port = process.env.PORT || 300
 
 // // Start Server
 // app.listen(portnumber, () => {
@@ -36,8 +36,8 @@ app.use("/api/auth", auth)
 app.use("/api/employee", employee)
 app.use("/api/committee", committee)
 
-// app.listen(PORT, () => {
-//     console.log(`Serve is runing port ${PORT}`)
-// })
+app.listen(port, () => {
+	console.log(`Serve is runing port ${port}`)
+})
 
-module.exports = app
+// module.exports = app
