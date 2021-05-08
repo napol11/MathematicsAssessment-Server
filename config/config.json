@@ -4,7 +4,6 @@
     "password":"825e0901",
     "database": "heroku_973b1ada62c17c0",
     "host": "us-cdbr-east-03.cleardb.com",
-    "dialect": "mysql",
     "port" : "3306"
   },
   "development1": {
