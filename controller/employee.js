@@ -587,7 +587,7 @@ exports.downloadfile = async (req, res) => {
 
 exports.delectFileCloud = async (req, res) => {
 	try {
-		let file = await models.doc.findOne({ where: { doc_name: req.params.id } })
+		let file = await models.doc.findByPk({ where: { id: req.params.id } })
 
 		// remove file in storage
 		await deleteFile(file.doc_path)
