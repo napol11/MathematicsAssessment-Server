@@ -621,6 +621,7 @@ exports.uploadfile = async (req, res) => {
 		for (file of req.files) {
 			const url = await uploadFiletoStorage(file, "files")
 			try {
+				// console.log(url)
 				let formresult = await models.formresult.findOne({
 					where: {
 						[Op.and]: [
@@ -640,7 +641,7 @@ exports.uploadfile = async (req, res) => {
 						where: {
 							[Op.and]: [
 								{
-									fk_result_id: result.id,
+									fk_result_id: formresult.id,
 								},
 								{
 									table: table,
@@ -653,28 +654,31 @@ exports.uploadfile = async (req, res) => {
 					})
 					if (!finddoc) {
 						var i = 0
-						const _list = []
+						// const _list = {}
 						for (i = 0; i < req.files.length; i++) {
 							const doc = {
-								doc_name: req.files[i].filename,
+								doc_name: `${Date.now()}_${req.files[i].originalname}`,
 								doc_filesize: req.files[i].size,
 								doc_filetype: req.files[i].mimetype,
 								doc_path: url,
-								fk_result_id: result.id,
+								fk_result_id: formresult.id,
 								doc_originalname: req.files[i].originalname,
 								table: table,
 								form: form,
 							}
+							// _list.push(doc)
+							let resFile = await models.doc.create(doc)
 						}
-						push._list(doc)
-						let save = await models.doc.create(_list)
+						// res.json(doc)
+						// let resFile = await models.doc.create(_list)
 						res.status(200).json("Upload Success")
 					} else {
+						await deleteFile(finddoc.doc_path)
 						let delect = await models.doc.destroy({
 							where: {
 								[Op.and]: [
 									{
-										fk_result_id: result.id,
+										fk_result_id: formresult.id,
 									},
 									{
 										table: table,
@@ -686,21 +690,23 @@ exports.uploadfile = async (req, res) => {
 							},
 						})
 						var i = 0
-						const _list = []
+						// const _list = []
 						for (i = 0; i < req.files.length; i++) {
 							const doc = {
-								doc_name: req.files[i].filename,
+								// doc_name: req.files[i].filename,
+								doc_name: `${Date.now()}_${req.files[i].originalname}`,
 								doc_filesize: req.files[i].size,
 								doc_filetype: req.files[i].mimetype,
 								doc_path: url,
-								fk_result_id: result.id,
+								fk_result_id: formresult.id,
 								doc_originalname: req.files[i].originalname,
 								table: table,
 								form: form,
 							}
-							push._list(doc)
+							// _list.push(doc)
+							let resFile = await models.doc.create(doc)
 						}
-						let save = await models.doc.create(_list)
+						// let resFile = await models.doc.create(_list)
 						res.status(200).json("Upload Success")
 					}
 				}
