@@ -1,6 +1,8 @@
 const models = require("../models/index")
 const { Op } = require("sequelize")
 
+const { uploadFiletoStorage, deleteFile, downloadFile } = require("../utils/upload/storage")
+
 // list data employee by id
 exports.dataEmployee = async (req, res) => {
 	const id = req.params.id
@@ -569,13 +571,145 @@ exports.getFile = async (req, res) => {
 }
 
 exports.downloadfile = async (req, res) => {
-	await models.doc
-		.findOne({ where: { doc_name: req.params.id } })
-		.then(file => {
-			res.download(`./${file.doc_path}`)
+	try {
+		let file = await models.doc.findOne({ where: { doc_name: req.params.id } })
+		if (!file) {
+			res.status(404).json("Not found file")
+		} else {
+			let path = downloadFile(file.doc_path)
+			res.download(`./${path}`)
+		}
+	} catch (error) {
+		console.log(error) // Failure
+		return res.status(500).json({ status: false, message: "internal server error" })
+	}
+}
+
+exports.delectFileCloud = async (req, res) => {
+	try {
+		let file = await models.doc.findOne({ where: { doc_name: req.params.id } })
+
+		// remove file in storage
+		await deleteFile(file.doc_path)
+		// delete info in database
+		// let resFile = await models.doc.deleteOne({ _id: req.params.id });
+		await models.doc.findByPk(req.params.id).then(file => {
+			// fs.unlinkSync(file.doc_path)
+			models.doc.destroy({
+				where: {
+					id: req.params.id,
+				},
+			})
+			res.status(200).json({
+				status: true,
+				data: "delete file message",
+			})
 		})
-		.catch(err => {
-			console.log(err)
-			res.status(500).json({ status: false, message: "internal server error" })
-		})
+	} catch (error) {
+		console.log(error) // Failure
+		return res.status(500).json({ status: false, message: "internal server error" })
+	}
+}
+
+exports.uploadfile = async (req, res) => {
+	const assessment_id = req.body.id_assessment
+	const employee_id = req.body.id_employee
+	const table = req.body.table
+	const form = req.body.form
+
+	if (req.files) {
+		for (file of req.files) {
+			const url = await uploadFiletoStorage(file, "files")
+			try {
+				let formresult = await models.formresult.findOne({
+					where: {
+						[Op.and]: [
+							{
+								fk_assessment_id: assessment_id,
+							},
+							{
+								fk_employee_id: employee_id,
+							},
+						],
+					},
+				})
+				if (!formresult) {
+					res.json("not found result")
+				} else {
+					let finddoc = await models.doc.findOne({
+						where: {
+							[Op.and]: [
+								{
+									fk_result_id: result.id,
+								},
+								{
+									table: table,
+								},
+								{
+									form: form,
+								},
+							],
+						},
+					})
+					if (!finddoc) {
+						var i = 0
+						const _list = []
+						for (i = 0; i < req.files.length; i++) {
+							const doc = {
+								doc_name: req.files[i].filename,
+								doc_filesize: req.files[i].size,
+								doc_filetype: req.files[i].mimetype,
+								doc_path: url,
+								fk_result_id: result.id,
+								doc_originalname: req.files[i].originalname,
+								table: table,
+								form: form,
+							}
+						}
+						push._list(doc)
+						let save = await models.doc.create(_list)
+						res.status(200).json("Upload Success")
+					} else {
+						let delect = await models.doc.destroy({
+							where: {
+								[Op.and]: [
+									{
+										fk_result_id: result.id,
+									},
+									{
+										table: table,
+									},
+									{
+										form: form,
+									},
+								],
+							},
+						})
+						var i = 0
+						const _list = []
+						for (i = 0; i < req.files.length; i++) {
+							const doc = {
+								doc_name: req.files[i].filename,
+								doc_filesize: req.files[i].size,
+								doc_filetype: req.files[i].mimetype,
+								doc_path: url,
+								fk_result_id: result.id,
+								doc_originalname: req.files[i].originalname,
+								table: table,
+								form: form,
+							}
+							push._list(doc)
+						}
+						let save = await models.doc.create(_list)
+						res.status(200).json("Upload Success")
+					}
+				}
+			} catch (error) {
+				console.log(error) // Failure
+				return res.status(500).json({ status: false, message: "internal server error" })
+			}
+		}
+	} else {
+		res.status(404).json("not file")
+	}
 }
