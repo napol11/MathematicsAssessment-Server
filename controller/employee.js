@@ -576,7 +576,7 @@ exports.downloadfile = async (req, res) => {
 		if (!file) {
 			res.status(404).json("Not found file")
 		} else {
-			let path = downloadFile(file.doc_path)
+			let path = await downloadFile(file.doc_path)
 			res.download(`./${path}`)
 		}
 	} catch (error) {
