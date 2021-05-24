@@ -423,6 +423,7 @@ exports.formtwo = async (req, res) => {
 							for (i = 0; i < req.body.formtwo.length; i++) {
 								const formtwo = {
 									formtwo_table: req.body.formtwo[i].formtwo_table,
+									num: req.body.formtwo[i].num,
 									formtwo_name: req.body.formtwo[i].formtwo_name,
 									formtwo_fte: req.body.formtwo[i].formtwo_fte,
 									formtwo_sucessem: req.body.formtwo[i].formtwo_sucessem,
@@ -447,6 +448,7 @@ exports.formtwo = async (req, res) => {
 							for (i = 0; i < req.body.formtwo.length; i++) {
 								const formtwo = {
 									formtwo_table: req.body.formtwo[i].formtwo_table,
+									num: req.body.formtwo[i].num,
 									formtwo_name: req.body.formtwo[i].formtwo_name,
 									formtwo_fte: req.body.formtwo[i].formtwo_fte,
 									formtwo_sucessem: req.body.formtwo[i].formtwo_sucessem,

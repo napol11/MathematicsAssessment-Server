@@ -20,6 +20,9 @@ module.exports = {
 			formtwo_sucesscom: {
 				type: Sequelize.INTEGER,
 			},
+			num: {
+				type: Sequelize.INTEGER,
+			},
 			//   createdAt: {
 			//     allowNull: false,
 			//     type: Sequelize.DATE

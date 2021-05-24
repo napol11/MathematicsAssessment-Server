@@ -584,6 +584,7 @@ exports.formtwo = async (req, res) => {
 									formtwo_sucesscom: req.body.formtwo[i].formtwo_table,
 									fk_formresult_id: findresult.id,
 									fk_committee_id: committee_id,
+									num: req.body.formtwo[i].num,
 								}
 								models.formtwo_committee.create(formtwo).then(formtwo_committee => {
 									res.status(200).json({
@@ -610,6 +611,7 @@ exports.formtwo = async (req, res) => {
 									formtwo_sucesscom: req.body.formtwo[i].formtwo_sucesscom,
 									fk_formresult_id: findresult.id,
 									fk_committee_id: committee_id,
+									num: req.body.formtwo[i].num,
 								}
 								models.formtwo_committee.create(formtwo).then(formtwo_committee => {
 									res.status(200).json({

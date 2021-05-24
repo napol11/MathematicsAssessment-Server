@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
 			formtwo_table: DataTypes.INTEGER,
 			fk_committee_id: DataTypes.INTEGER,
 			formtwo_sucesscom: DataTypes.INTEGER,
+			num: DataTypes.INTEGER,
 		},
 		{
 			sequelize,

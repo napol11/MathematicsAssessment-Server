@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
 	formtwo.init(
 		{
 			formtwo_table: DataTypes.INTEGER,
+			num: DataTypes.INTEGER,
 			formtwo_name: DataTypes.STRING,
 			formtwo_fte: DataTypes.INTEGER,
 			formtwo_sucessem: DataTypes.INTEGER,
