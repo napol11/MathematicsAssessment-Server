@@ -61,6 +61,7 @@ exports.login = async (req, res) => {
 exports.changepass = async (req, res) => {
 	const employee_id = req.body.employee_id
 	const password = req.body.password
+	const oldpassword = req.boby.oldpassword
 	const encryptedPassword = await bcrypt.hash(password, saltRounds)
 	const resetPass = {
 		password: encryptedPassword,
@@ -68,26 +69,35 @@ exports.changepass = async (req, res) => {
 	await models.employee
 		.findByPk(employee_id)
 		.then(data => {
-			models.user
-				.update(resetPass, {
-					where: { id: data.fk_user_id },
-				})
-				.then(num => {
-					if (num == 1) {
-						res.send({
-							message: "Update Sussessfully",
+			//check password
+			bcrypt.compare(oldpassword, data.password, function (err, result) {
+				if (result == true) {
+					models.user
+						.update(resetPass, {
+							where: { id: data.fk_user_id },
 						})
-					} else {
-						res.send({
-							message: "Cannot Update",
+						.then(num => {
+							if (num == 1) {
+								res.send({
+									message: "Update Sussessfully",
+								})
+							} else {
+								res.send({
+									message: "Cannot Update",
+								})
+							}
 						})
-					}
-				})
-				.catch(err => {
-					res.status(500).send({
-						message: err.message || "ERROR",
+						.catch(err => {
+							res.status(500).send({
+								message: err.message || "ERROR",
+							})
+						})
+				} else {
+					res.status(404).send({
+						message: "Password not Found",
 					})
-				})
+				}
+			})
 		})
 		.catch(err => {
 			res.status(500).send({
