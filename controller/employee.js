@@ -152,8 +152,18 @@ exports.formone = async (req, res) => {
 						formone_lababy: req.body.formone_lababy,
 						formone_lamonk: req.body.formone_lamonk,
 						formone_lamilitary: req.body.formone_lamilitary,
-						formone_historypromo: req.body.formone_historypromo,
-						formone_historypunish: req.body.formone_historypunish,
+						formone_budgetone: req.body.formone_budgetone,
+						formone_budgettwo: req.body.formone_budgettwo,
+						formone_promoone: req.body.formone_promoone,
+						formone_promotwo: req.body.formone_promotwo,
+						formone_punishdate: req.body.formone_punishdate,
+						formone_punishlevel: req.body.formone_punishlevel,
+						formone_study: req.body.formone_study, // 2 ลาศึกษาต่อ 1 ไม่ลาศึกษาต่อ
+						formone_studyback: req.body.formone_studyback,
+						formone_studyend: req.body.formone_studyend,
+						formone_studystart: req.body.formone_studystart,
+						// formone_historypromo: req.body.formone_historypromo,
+						// formone_historypunish: req.body.formone_historypunish,
 						fk_formresult_id: formresult.id,
 					}
 					models.formone.create(formone).then(formone => {
@@ -177,8 +187,18 @@ exports.formone = async (req, res) => {
 					formone_lababy: req.body.formone_lababy,
 					formone_lamonk: req.body.formone_lamonk,
 					formone_lamilitary: req.body.formone_lamilitary,
-					formone_historypromo: req.body.formone_historypromo,
-					formone_historypunish: req.body.formone_historypunish,
+					formone_budgetone: req.body.formone_budgetone,
+					formone_budgettwo: req.body.formone_budgettwo,
+					formone_promoone: req.body.formone_promoone,
+					formone_promotwo: req.body.formone_promotwo,
+					formone_punishdate: req.body.formone_punishdate,
+					formone_punishlevel: req.body.formone_punishlevel,
+					formone_study: req.body.formone_study, // 2 ลาศึกษาต่อ 1 ไม่ลาศึกษาต่อ
+					formone_studyback: req.body.formone_studyback,
+					formone_studyend: req.body.formone_studyend,
+					formone_studystart: req.body.formone_studystart,
+					// formone_historypromo: req.body.formone_historypromo,
+					// formone_historypunish: req.body.formone_historypunish,
 				}
 				models.formone
 					.update(formone, {

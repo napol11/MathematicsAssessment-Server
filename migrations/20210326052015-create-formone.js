@@ -41,6 +41,36 @@ module.exports = {
 			fk_formresult_id: {
 				type: Sequelize.INTEGER,
 			},
+			formone_study: {
+				type: Sequelize.INTEGER,
+			},
+			formone_studystart: {
+				type: Sequelize.DATE,
+			},
+			formone_studyend: {
+				type: Sequelize.DATE,
+			},
+			formone_studyback: {
+				type: Sequelize.DATE,
+			},
+			formone_budgetone: {
+				type: Sequelize.STRING,
+			},
+			formone_budgettwo: {
+				type: Sequelize.STRING,
+			},
+			formone_promoone: {
+				type: Sequelize.STRING,
+			},
+			formone_promotwo: {
+				type: Sequelize.STRING,
+			},
+			formone_punishdate: {
+				type: Sequelize.STRING,
+			},
+			formone_punishlevel: {
+				type: Sequelize.STRING,
+			},
 			// createdAt: {
 			// 	allowNull: false,
 			// 	type: Sequelize.DATE,
