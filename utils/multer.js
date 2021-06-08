@@ -15,7 +15,7 @@ const multer = require("multer")
 
 exports.uploadFile = multer({
 	storage: multer.memoryStorage(),
-	limits: {
-		fileSize: 1024 * 1024,
-	},
+	// limits: {
+	// 	fileSize: 1024 * 1024,
+	// },
 })
