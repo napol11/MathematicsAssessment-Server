@@ -1,0 +1,3 @@
+ทำการพิมพ์ npm install เพื่อติดตั้งก่อน
+วิธีการรัน ให้พิมพ์ npm start ในการรัน
+ใน Project นี้ มีการ Hosting ของ Heroku 
